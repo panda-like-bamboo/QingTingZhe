@@ -1,0 +1,730 @@
+{
+    "title": "艾森克人格问卷 (EPQ-85成人版)",
+    "description": "指导语：请对下列每一题目进行回答，在“是”或“否”字上打“√”，回答无所谓对错，这里没有对你不利的题目，请尽快回答，不要对每题的含义进行过多的思考。每题都要回答。",
+    "questions": [
+      {
+        "number": 1,
+        "text": "你是否有广泛的爱好",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 2,
+        "text": "再做任何事情之前你是否都要先考虑一番",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 3,
+        "text": "你的情绪时常波动么？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 4,
+        "text": "当别人做了好事周围人却认为是你做的，你是否感到洋洋得意？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 5,
+        "text": "你是一个健谈的人吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 6,
+        "text": "你曾经无缘无故的感到自己可怜吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 7,
+        "text": "你曾经有过因为贪心而获得分外的物质利益吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 8,
+        "text": "晚上你是否会小心的把门锁好？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 9,
+        "text": "你认为自己活泼吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 10,
+        "text": "当你看到小孩或（动物）受折磨时是否会感到很难受？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 11,
+        "text": "你是否时常担心你会说出（或做出）不应该说（或做）的事情？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 12,
+        "text": "若你说过要做某件事，是否不管遇到什么困难都要把它做成？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 13,
+        "text": "在愉快的聚会中，你是否尽情享受？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 14,
+        "text": "你是一位易激怒的人吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 15,
+        "text": "你是否有过自己做错了事反倒责备别人的时候？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 16,
+        "text": "你喜欢会见陌生人么？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 17,
+        "text": "你是否相信参加储蓄是一种好办法？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 18,
+        "text": "你的感情是否容易受到伤害？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 19,
+        "text": "你想服用有奇特效果或是有危险性的药物么？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 20,
+        "text": "你是否时常感到“及其厌烦”？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 21,
+        "text": "你曾多占、多得别人的东西(甚至是一针一线)吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 22,
+        "text": "如果条件允许，你喜欢经常外出（旅行）么？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 23,
+        "text": "对你所喜欢的人，你是否为取乐开过过头的玩笑么？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 24,
+        "text": "你是否常因“自罪感”而烦恼？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 25,
+        "text": "你是否谈论一些你自己毫无所知的事情？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 26,
+        "text": "你是否宁愿看些书而不想去会见别人？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 27,
+        "text": "有坏人想要害你么？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 28,
+        "text": "你认为自己“神经过敏”吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 29,
+        "text": "你的朋友多吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 30,
+        "text": "你是个忧虑重重的人吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 31,
+        "text": "你在儿童时代是否立即听从大人的吩咐而毫无怨言吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 32,
+        "text": "你是一个无忧无虑，逍遥自在的人吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 33,
+        "text": "有礼貌、爱整洁对你很重要吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 34,
+        "text": "你是否担心将会发生可怕的事情？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 35,
+        "text": "在结识新朋友时你通常是主动的吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 36,
+        "text": "你觉得自己是一个非常敏感的人吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 37,
+        "text": "和别人在一起的时候你是否不常说话？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 38,
+        "text": "你是否觉得结婚是个框框，应该废除？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 39,
+        "text": "你有时有点自吹自擂吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 40,
+        "text": "在一个沉闷的场合，你能给大家添点生气吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 41,
+        "text": "慢腾腾开车的司机是否使你讨厌？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 42,
+        "text": "你担心自己的健康吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 43,
+        "text": "你是否喜欢说笑话和谈论有趣的事情？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 44,
+        "text": "你是否觉得大多数事情对你来说都是无所谓的？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 45,
+        "text": "你小时候是否有过对待父母鲁莽、无礼的行为吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 46,
+        "text": "你喜欢和别人打成一片、整天相处在一起吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 47,
+        "text": "你失眠吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 48,
+        "text": "你饭前必定先洗手吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 49,
+        "text": "当别人问你话时你是否对答如流？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 50,
+        "text": "你是否宁愿有富裕时间而早点动身去赴约会吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 51,
+        "text": "你经常无缘无故感到疲倦或无精打采吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 52,
+        "text": "在游戏或打牌时你经常作弊吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 53,
+        "text": "你喜欢紧张的工作吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 54,
+        "text": "你时常觉得自己的生活很单调吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 55,
+        "text": "你曾经为了自己而利用过别人吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 56,
+        "text": "你是否参加的活动太多而超过自己可能分配的时间？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 57,
+        "text": "你是否有那么几个人时常躲着你?",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 58,
+        "text": "你是否认为人们为保障自己的将来而精打细算勤俭时间太多了？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 59,
+        "text": "你是否曾经想过去死吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 60,
+        "text": "若你确知不会被发现时你会少付给人家钱吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 61,
+        "text": "你能使一个联欢会开成功吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 62,
+        "text": "你是否尽力使自己不粗鲁？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 63,
+        "text": "一件使你为难的事情过去之后是否会使你烦恼好久？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 64,
+        "text": "你是否坚持要按照你的想法办事？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 65,
+        "text": "当你去乘火车时，你是否会最后一分钟到达？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 66,
+        "text": "你是否神经质？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 67,
+        "text": "你常感到寂寞吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 68,
+        "text": "你的言行总是一致的吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 69,
+        "text": "你有时喜欢玩弄动物吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 70,
+        "text": "有人对你或你的工作吹毛求疵时，是否容易伤害你的积极性？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 71,
+        "text": "你去赴约会或上班时，曾否迟到？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 72,
+        "text": "你是否喜欢在你的周围有许多热闹和高兴的事情？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 73,
+        "text": "你愿意让别人怕你吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 74,
+        "text": "你是否有时兴致勃勃，有时却很慵懒不想动弹？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 75,
+        "text": "你有时会把今天应做的事情拖到明天吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 76,
+        "text": "别人是否认为你是生气勃勃的？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 77,
+        "text": "别人是否对你说过许多谎话？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 78,
+        "text": "你是否对有些事情易性急生气？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 79,
+        "text": "若你有错误，是否愿意承认？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 80,
+        "text": "你是一个整洁严谨，有条不紊的人吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 81,
+        "text": "在公园里或马路上，你是否总把果皮或废纸扔到垃圾箱里？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 82,
+        "text": "遇到为难的事情，你是否拿不定主意？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 83,
+        "text": "你是否有过随口骂人的时候？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 84,
+        "text": "若你乘车或坐飞机外出时，你是否担心会碰撞或出意外？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      },
+      {
+        "number": 85,
+        "text": "你是一个爱交往的人吗？",
+        "options": [
+          {"text": "是", "value": "yes"},
+          {"text": "否", "value": "no"}
+        ]
+      }
+    ],
+    "scoring_rules": {
+      "E": {
+        "yes": [1, 5, 9, 13, 16, 22, 29, 32, 35, 40, 43, 46, 49, 53, 56, 61, 72, 76, 85],
+        "no": [26, 37]
+      },
+      "N": {
+        "yes": [3, 6, 11, 14, 18, 20, 24, 28, 30, 34, 36, 42, 47, 51, 54, 59, 63, 66, 67, 70, 74, 78, 82, 84],
+        "no": []
+      },
+      "P": {
+        "yes": [19, 23, 27, 38, 41, 44, 57, 58, 65, 69, 73, 77],
+        "no": [2, 8, 10, 17, 33, 50, 62, 80]
+      },
+      "L": {
+        "yes": [12, 31, 48, 68, 79, 81],
+        "no": [4, 7, 15, 21, 25, 39, 45, 52, 55, 60, 64, 71, 75, 83]
+      }
+    },
+    "interpretation_rules": {
+      "E": [
+        {"range": {"min": 15, "max": 21}, "conclusion": "人格外向型：可能是好交际，渴望刺激和冒险，情感易于冲动。在多人环境中表现活跃。"},
+        {"range": {"min": 0, "max": 8}, "conclusion": "人格内向型：如好静，富于内省，不喜欢刺激，喜欢有秩序的生活方式，情绪比较稳定。"}
+      ],
+      "N": [
+        {"range": {"min": 14, "max": 24}, "conclusion": "高神经质：表示情绪不稳定型，焦虑、忧心忡忡、常郁郁不乐，有强烈情绪反应，甚至出现不够理智的行为。"},
+        {"range": {"min": 0, "max": 9}, "conclusion": "情绪稳定型：冷静，平和，情绪调节能力强。"}
+      ],
+      "P": [
+        {"range": {"min": 8, "max": 20}, "conclusion": "高精神质：表示可能是精神质，孤独、不关心他人，攻击性，反社会倾向，缺乏同理心与非传统思维，难以适应外部环境，不近人情，与别人不友好，喜欢寻衅搅扰，喜欢干奇特的事情，并且不顾危险。"},
+        {"range": {"min": 0, "max": 7}, "conclusion": "低精神质：温和，富有同情心、遵守规范。"}
+      ],
+      "L": [
+        {"range": {"min": 18, "max": 20}, "conclusion": "高掩饰性：表示被试有掩饰倾向，测验结果可能失真。"}
+      ]
+    },
+    "combinations_interpretation": [
+       {"type": "盗窃案-外向不稳定攻击焦虑", "description": "针对盗窃案，外向的，情绪不稳定型，攻击性，焦虑的人的讯问策略..."},
+       {"type": "盗窃案-外向稳定温和", "description": "针对盗窃案，外向的，情绪稳定的，情绪调节能力强，温和，富有同情心的人的讯问策略..."},
+       {"type": "盗窃案-内向不稳定反社会", "description": "针对盗窃案，内向的，情绪不稳定型，孤独的，反社会倾向，与别人不友好，喜欢寻衅的人的讯问策略..."},
+       {"type": "盗窃案-内向稳定温和", "description": "针对盗窃案，内向的，情绪比较稳定，温和，富有同情心，喜欢有秩序的生活方式的人的讯问策略..."},
+       {"type": "盗窃案-逃避不稳定攻击焦虑", "description": "针对盗窃案，逃避的，情绪不稳定型，攻击性，焦虑的人的讯问策略..."},
+       {"type": "盗窃案-逃避稳定反社会", "description": "针对盗窃案，逃避的，情绪比较稳定，孤独的，反社会倾向，与别人不友好的人的讯问策略..."}
+       
+    ]
+  }

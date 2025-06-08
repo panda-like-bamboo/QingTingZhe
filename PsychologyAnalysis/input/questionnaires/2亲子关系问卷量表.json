@@ -1,0 +1,240 @@
+{
+    "title": "亲子关系问卷量表",
+    "description": "该量表主要在于测量您和孩子的关系如何。家长您好：请根据你的实际情况（实际感受）作答。答案没有对错之分，对每一个句子无须多考虑。",
+    "questions": [
+      {
+        "number": 1,
+        "text": "不管我的工作或生活再忙碌，每一天我都会留一些时间给子女",
+        "options": [
+          {"text": "很不符合", "score": 1},
+          {"text": "不符合", "score": 2},
+          {"text": "一般", "score": 3},
+          {"text": "符合", "score": 4},
+          {"text": "非常符合", "score": 5}
+        ]
+      },
+      {
+        "number": 2,
+        "text": "我能经常保持愉快的心情和孩子相处",
+        "options": [
+          {"text": "很不符合", "score": 1},
+          {"text": "不符合", "score": 2},
+          {"text": "一般", "score": 3},
+          {"text": "符合", "score": 4},
+          {"text": "非常符合", "score": 5}
+        ]
+      },
+      {
+        "number": 3,
+        "text": "我认为孩子是有理性的，能自己面对和解决问题",
+        "options": [
+          {"text": "很不符合", "score": 1},
+          {"text": "不符合", "score": 2},
+          {"text": "一般", "score": 3},
+          {"text": "符合", "score": 4},
+          {"text": "非常符合", "score": 5}
+        ]
+      },
+      {
+        "number": 4,
+        "text": "和孩子对话时，我甚少使用「你应该…」、「你最好…否则…」、「你再不… 我就…」的语气和孩子交谈",
+        "options": [
+          {"text": "很不符合", "score": 1},
+          {"text": "不符合", "score": 2},
+          {"text": "一般", "score": 3},
+          {"text": "符合", "score": 4},
+          {"text": "非常符合", "score": 5}
+        ]
+      },
+      {
+        "number": 5,
+        "text": "我觉得孩子能欢喜的生活，比成绩好更重要",
+        "options": [
+          {"text": "很不符合", "score": 1},
+          {"text": "不符合", "score": 2},
+          {"text": "一般", "score": 3},
+          {"text": "符合", "score": 4},
+          {"text": "非常符合", "score": 5}
+        ]
+      },
+      {
+        "number": 6,
+        "text": "我觉得孩子犯错和惹麻烦是成长必经的过程",
+        "options": [
+          {"text": "很不符合", "score": 1},
+          {"text": "不符合", "score": 2},
+          {"text": "一般", "score": 3},
+          {"text": "符合", "score": 4},
+          {"text": "非常符合", "score": 5}
+        ]
+      },
+      {
+        "number": 7,
+        "text": "孩子说话时，我能耐心专注的听完",
+        "options": [
+          {"text": "很不符合", "score": 1},
+          {"text": "不符合", "score": 2},
+          {"text": "一般", "score": 3},
+          {"text": "符合", "score": 4},
+          {"text": "非常符合", "score": 5}
+        ]
+      },
+      {
+        "number": 8,
+        "text": "我能经常和孩子有亲密的接触（如摸头、拍肩、拍手、相互拥抱……）",
+        "options": [
+          {"text": "很不符合", "score": 1},
+          {"text": "不符合", "score": 2},
+          {"text": "一般", "score": 3},
+          {"text": "符合", "score": 4},
+          {"text": "非常符合", "score": 5}
+        ]
+      },
+      {
+        "number": 9,
+        "text": "即使孩子犯了错，我也不会因此就认为他（她）是个坏孩子",
+        "options": [
+          {"text": "很不符合", "score": 1},
+          {"text": "不符合", "score": 2},
+          {"text": "一般", "score": 3},
+          {"text": "符合", "score": 4},
+          {"text": "非常符合", "score": 5}
+        ]
+      },
+      {
+        "number": 10,
+        "text": "我经常给自己和孩子充裕的时间，避免催促孩子",
+        "options": [
+          {"text": "很不符合", "score": 1},
+          {"text": "不符合", "score": 2},
+          {"text": "一般", "score": 3},
+          {"text": "符合", "score": 4},
+          {"text": "非常符合", "score": 5}
+        ]
+      },
+      {
+        "number": 11,
+        "text": "不论孩子发生什么事，我都能以孩子的立场，分析孩子内心的感受",
+        "options": [
+          {"text": "很不符合", "score": 1},
+          {"text": "不符合", "score": 2},
+          {"text": "一般", "score": 3},
+          {"text": "符合", "score": 4},
+          {"text": "非常符合", "score": 5}
+        ]
+      },
+      {
+        "number": 12,
+        "text": "亲子间有冲突时，我不认为一定是孩子的错",
+        "options": [
+          {"text": "很不符合", "score": 1},
+          {"text": "不符合", "score": 2},
+          {"text": "一般", "score": 3},
+          {"text": "符合", "score": 4},
+          {"text": "非常符合", "score": 5}
+        ]
+      },
+      {
+        "number": 13,
+        "text": "我能给孩子充分的自主空间，决定自己的事",
+        "options": [
+          {"text": "很不符合", "score": 1},
+          {"text": "不符合", "score": 2},
+          {"text": "一般", "score": 3},
+          {"text": "符合", "score": 4},
+          {"text": "非常符合", "score": 5}
+        ]
+      },
+      {
+        "number": 14,
+        "text": "我要求孩子做的事情，我自己都能做到",
+        "options": [
+          {"text": "很不符合", "score": 1},
+          {"text": "不符合", "score": 2},
+          {"text": "一般", "score": 3},
+          {"text": "符合", "score": 4},
+          {"text": "非常符合", "score": 5}
+        ]
+      },
+      {
+        "number": 15,
+        "text": "我答应孩子的事情，我一定都会履行",
+        "options": [
+          {"text": "很不符合", "score": 1},
+          {"text": "不符合", "score": 2},
+          {"text": "一般", "score": 3},
+          {"text": "符合", "score": 4},
+          {"text": "非常符合", "score": 5}
+        ]
+      },
+      {
+        "number": 16,
+        "text": "我与孩子谈话时，我能了解孩子内心真正的感受",
+        "options": [
+          {"text": "很不符合", "score": 1},
+          {"text": "不符合", "score": 2},
+          {"text": "一般", "score": 3},
+          {"text": "符合", "score": 4},
+          {"text": "非常符合", "score": 5}
+        ]
+      },
+      {
+        "number": 17,
+        "text": "我了解孩子内心的喜好和厌恶",
+        "options": [
+          {"text": "很不符合", "score": 1},
+          {"text": "不符合", "score": 2},
+          {"text": "一般", "score": 3},
+          {"text": "符合", "score": 4},
+          {"text": "非常符合", "score": 5}
+        ]
+      },
+      {
+        "number": 18,
+        "text": "孩子愿意主动的告诉我，他在外面发生的事情和内心感受",
+        "options": [
+          {"text": "很不符合", "score": 1},
+          {"text": "不符合", "score": 2},
+          {"text": "一般", "score": 3},
+          {"text": "符合", "score": 4},
+          {"text": "非常符合", "score": 5}
+        ]
+      },
+      {
+        "number": 19,
+        "text": "和孩子谈完话，我甚少批评或指责孩子的想法",
+        "options": [
+          {"text": "很不符合", "score": 1},
+          {"text": "不符合", "score": 2},
+          {"text": "一般", "score": 3},
+          {"text": "符合", "score": 4},
+          {"text": "非常符合", "score": 5}
+        ]
+      },
+      {
+        "number": 20,
+        "text": "我满意我目前的家庭和孩子的状况",
+        "options": [
+          {"text": "很不符合", "score": 1},
+          {"text": "不符合", "score": 2},
+          {"text": "一般", "score": 3},
+          {"text": "符合", "score": 4},
+          {"text": "非常符合", "score": 5}
+        ]
+      }
+    ],
+    "results": [
+      {
+        "range": {"min": 20, "max": 59},
+        "conclusion": "亲子关系已有了危机，须马上调整。 建议：您需要缓和与孩子之间的关系，可以尝试与孩子多聊聊学校里的生活，每天有哪些开心和不开心的事情，试着去倾听孩子的声音，像对待朋友般给出建议而不是严厉地去指责孩子。平常的时候可以尝试与孩子一同参与一些户外活动，增进彼此间的联系。"
+      },
+      {
+        "range": {"min": 60, "max": 79},
+        "conclusion": "你们的相处还算良好。 建议：您和孩子相处的较好，继续保持这样的状况，尝试进一步地去与孩子沟通内心的想法和观念，您和孩子的关系可以更进一步。"
+      },
+      {
+        "range": {"min": 80, "max": 100},
+        "conclusion": "恭喜你，你们的亲子关系很好 建议：您和孩子相处的非常好，请继续保持下去。"
+      }
+    ]
+  }

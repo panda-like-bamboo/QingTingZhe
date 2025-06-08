@@ -1,0 +1,151 @@
+{% extends "base.html" %} {# Assuming you have a base template with styles/scripts #}
+
+{% block title %}编辑审讯笔录{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>编辑审讯笔录</h2>
+    <hr>
+
+    {# --- 表单开始，提交到保存路由 --- #}
+    <form action="{{ url_for('save_interrogation_record') }}" method="POST">
+
+        {# --- 基本信息部分 --- #}
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="record_number" class="form-label">笔录次数</label>
+                <input type="text" class="form-control" id="record_number" name="record_number" value="{{ template_data.record_number }}">
+            </div>
+            <div class="col-md-6">
+                <label for="title" class="form-label">标题</label>
+                <input type="text" class="form-control" id="title" name="title" value="{{ template_data.title }}">
+            </div>
+        </div>
+        <div class="row mb-3">
+             <div class="col-md-6">
+                <label for="time_start" class="form-label">开始时间</label>
+                {# Consider using datetime-local input if browser support is okay #}
+                <input type="text" class="form-control" id="time_start" name="time_start" value="{{ template_data.time_start }}">
+            </div>
+            <div class="col-md-6">
+                <label for="time_end" class="form-label">结束时间</label>
+                <input type="text" class="form-control" id="time_end" name="time_end" value="{{ template_data.time_end }}">
+            </div>
+        </div>
+         <div class="mb-3">
+            <label for="location" class="form-label">地点</label>
+            <input type="text" class="form-control" id="location" name="location" value="{{ template_data.location }}">
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="interrogator_unit" class="form-label">讯问人单位</label>
+                <input type="text" class="form-control" id="interrogator_unit" name="interrogator_unit" value="{{ template_data.interrogator_unit }}">
+            </div>
+            <div class="col-md-6">
+                 <label for="interrogator_signature" class="form-label">讯问人(签名占位)</label>
+                <input type="text" class="form-control" id="interrogator_signature" name="interrogator_signature" value="{{ template_data.interrogator_signature }}">
+            </div>
+        </div>
+         <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="recorder_unit" class="form-label">记录人单位</label>
+                <input type="text" class="form-control" id="recorder_unit" name="recorder_unit" value="{{ template_data.recorder_unit }}">
+            </div>
+            <div class="col-md-6">
+                 <label for="recorder_signature" class="form-label">记录人(签名占位)</label>
+                <input type="text" class="form-control" id="recorder_signature" name="recorder_signature" value="{{ template_data.recorder_signature }}">
+            </div>
+        </div>
+
+        <hr>
+        <h4>被讯问人信息</h4>
+         <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="person_name" class="form-label">姓名</label>
+                <input type="text" class="form-control" id="person_name" name="person_name" value="{{ template_data.person_name }}">
+            </div>
+            <div class="col-md-2">
+                <label for="person_gender" class="form-label">性别</label>
+                <input type="text" class="form-control" id="person_gender" name="person_gender" value="{{ template_data.person_gender }}">
+            </div>
+             <div class="col-md-2">
+                <label for="person_age" class="form-label">年龄</label>
+                <input type="text" class="form-control" id="person_age" name="person_age" value="{{ template_data.person_age }}">
+            </div>
+             <div class="col-md-4">
+                <label for="person_dob" class="form-label">出生日期</label>
+                <input type="text" class="form-control" id="person_dob" name="person_dob" value="{{ template_data.person_dob }}">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="person_id_type_number" class="form-label">身份证号</label>
+            <input type="text" class="form-control" id="person_id_type_number" name="person_id_type_number" value="{{ template_data.person_id_type_number }}">
+        </div>
+        <div class="mb-3">
+            <label for="person_address" class="form-label">家庭住址</label>
+            <input type="text" class="form-control" id="person_address" name="person_address" value="{{ template_data.person_address }}">
+        </div>
+         <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="person_contact" class="form-label">联系方式</label>
+                <input type="text" class="form-control" id="person_contact" name="person_contact" value="{{ template_data.person_contact }}">
+            </div>
+            <div class="col-md-6">
+                <label for="person_hukou" class="form-label">户籍地</label>
+                <input type="text" class="form-control" id="person_hukou" name="person_hukou" value="{{ template_data.person_hukou }}">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="arrival_departure_info" class="form-label">到案/离开信息</label>
+            <textarea class="form-control" id="arrival_departure_info" name="arrival_departure_info" rows="2">{{ template_data.arrival_departure_info }}</textarea>
+        </div>
+
+        <hr>
+        <h4>讯问内容</h4>
+        {# --- 问答对部分 --- #}
+        {% for qa in template_data.questions_answers %}
+        <div class="qa-pair mb-4 p-3 border rounded">
+            <div class="mb-2">
+                <label for="q_{{ loop.index0 }}" class="form-label"><b>问题 {{ loop.index }}:</b></label>
+                {# Make question editable too #}
+                <textarea class="form-control form-control-sm" id="q_{{ loop.index0 }}" name="questions_answers[{{ loop.index0 }}][q]" rows="2">{{ qa.q }}</textarea>
+            </div>
+            <div>
+                <label for="a_{{ loop.index0 }}" class="form-label">回答 {{ loop.index }}:</label>
+                <textarea class="form-control" id="a_{{ loop.index0 }}" name="questions_answers[{{ loop.index0 }}][a]" rows="4">{{ qa.a }}</textarea>
+            </div>
+        </div>
+        {% else %}
+        <p class="text-muted">模板中没有问答内容。</p>
+        {% endfor %}
+
+        {# --- 可以添加按钮来动态增加问答对 (需要 JavaScript) --- #}
+        {# <button type="button" class="btn btn-secondary btn-sm mb-3">添加问答</button> #}
+
+        <hr>
+        <h4>签名区域</h4>
+         {# --- 签名部分 (占位) --- #}
+         <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="sig_person" class="form-label">被讯问人(签名占位)</label>
+                {# Use name matching the save route: signature_section[key] #}
+                <input type="text" class="form-control" id="sig_person" name="signature_section[person_signature]" value="{{ template_data.signature_section.person_signature }}">
+            </div>
+             <div class="col-md-6">
+                <label for="sig_date" class="form-label">时间(签名占位)</label>
+                <input type="text" class="form-control" id="sig_date" name="signature_section[date]" value="{{ template_data.signature_section.date }}">
+            </div>
+         </div>
+
+
+        {# --- 提交按钮 --- #}
+        <div class="mt-4 mb-5">
+            <button type="submit" class="btn btn-primary">保存笔录</button>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">取消</a>
+            {# Optionally add a 'Save and Generate PDF' button #}
+        </div>
+
+    </form> {# --- 表单结束 --- #}
+
+</div>
+{% endblock %}

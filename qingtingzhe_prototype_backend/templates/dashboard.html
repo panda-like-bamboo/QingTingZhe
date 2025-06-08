@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}功能列表 - 倾听者后台{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+    <h2>后台功能列表</h2>
+    <ul class="dashboard-list">
+        <li><a href="{{ url_for('view_petitioner_guidance') }}">查询报告</a></li>
+        <li><a href="{{ url_for('data_analysis') }}">数据分析</a></li>
+        <li><a href="{{ url_for('interrogation_input') }}">辅助智能审讯笔录</a></li>
+        <li><a href="{{ url_for('view_petitioner_guidance') }}">上访户情绪疏导</a></li>
+        <li><a href="{{ url_for('view_juvenile_counseling') }}">未成年人犯罪心理辅导 </a></li>
+        <li><a href="{{ url_for('view_police_report') }}">民辅警心理评估报告</a></li>
+        <li><a href="{{ url_for('user_management') }}">用户管理</a></li>
+    </ul>
+    <hr>
+     <p><a href="{{ url_for('logout') }}" class="btn btn-secondary">退出登录</a></p>
+</div>
+{% endblock %}

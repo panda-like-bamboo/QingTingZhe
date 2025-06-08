@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}智能审讯笔录 - 模板预览{% endblock %}
+
+{% block content %}
+    <h2>智能审讯笔录 - 模板预览</h2>
+
+    <h3>填写的基本信息:</h3>
+    <ul>
+        <li>姓名: {{ basic_info.get('name', 'N/A') }}</li>
+        <li>性别: {{ basic_info.get('gender', 'N/A') }}</li>
+        <li>身份证号: {{ basic_info.get('id_card', 'N/A') }}</li>
+        <li>手机号: {{ basic_info.get('phone', 'N/A') }}</li>
+        <li>家庭住址: {{ basic_info.get('address', 'N/A') }}</li>
+    </ul>
+
+    <h3>笔录模板:</h3>
+    <pre><code>{{ record_template_str | safe }}</code></pre>
+
+    <a href="{{ url_for('download_interrogation_pdf') }}" class="btn btn-secondary" disabled>生成并导出PDF</a>
+    <p><a href="{{ url_for('interrogation_input') }}">返回填写信息</a></p>
+    <p><a href="{{ url_for('dashboard') }}">返回功能列表</a></p>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // JavaScript to make the JSON pretty print (optional)
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const codeElement = document.querySelector('pre code');
+        if (codeElement) {
+            try {
+                const jsonData = JSON.parse(codeElement.textContent);
+                // Replace basic info placeholders if needed here client-side,
+                // but it's better handled server-side usually.
+                // For now, just pretty print the template JSON.
+                codeElement.textContent = JSON.stringify(jsonData, null, 2);
+            } catch (e) {
+                console.error("Error parsing/formatting JSON template:", e);
+                // Keep the original text if parsing fails
+            }
+        }
+    });
+</script>
+{% endblock %}

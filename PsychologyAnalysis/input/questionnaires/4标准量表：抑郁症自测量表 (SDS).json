@@ -1,0 +1,224 @@
+{
+  "title": "标准量表：抑郁症自测量表 (SDS)",
+  "description": "抑郁自评量表 Self-Rating Depression Scale（SDS）是由美国杜克大学医学院的William W.K.Zung于1965年编制的，是目前应用最广泛的抑郁自评量表之一。整个量表共20个条目，用于衡量抑郁状态的轻重程度及其在治疗中的变化，适用于具有抑郁症状的成年人。下面请根据您最近一周的感受进行选择。",
+  "questions": [
+    {
+      "number": 1,
+      "text": "我觉得闷闷不乐，情绪低沉",
+      "options": [
+        {"text": "没有或很少时间", "score": 1},
+        {"text": "小部分时间", "score": 2},
+        {"text": "相当多时间", "score": 3},
+        {"text": "绝大部分或全部时间", "score": 4}
+      ]
+    },
+    {
+      "number": 2,
+      "text": "我觉得一天之中早晨最好",
+      "options": [
+        {"text": "没有或很少时间", "score": 4},
+        {"text": "小部分时间", "score": 3},
+        {"text": "相当多时间", "score": 2},
+        {"text": "绝大部分或全部时间", "score": 1}
+      ]
+    },
+    {
+      "number": 3,
+      "text": "我一阵阵地哭出来或是想哭",
+      "options": [
+        {"text": "没有或很少时间", "score": 1},
+        {"text": "小部分时间", "score": 2},
+        {"text": "相当多时间", "score": 3},
+        {"text": "绝大部分或全部时间", "score": 4}
+      ]
+    },
+    {
+      "number": 4,
+      "text": "我夜间睡眠不好",
+      "options": [
+        {"text": "没有或很少时间", "score": 1},
+        {"text": "小部分时间", "score": 2},
+        {"text": "相当多时间", "score": 3},
+        {"text": "绝大部分或全部时间", "score": 4}
+      ]
+    },
+    {
+      "number": 5,
+      "text": "我吃的和平时一样多",
+      "options": [
+        {"text": "没有或很少时间", "score": 4},
+        {"text": "小部分时间", "score": 3},
+        {"text": "相当多时间", "score": 2},
+        {"text": "绝大部分或全部时间", "score": 1}
+      ]
+    },
+    {
+      "number": 6,
+      "text": "我与异性接触时和以往一样感到愉快",
+      "options": [
+        {"text": "没有或很少时间", "score": 4},
+        {"text": "小部分时间", "score": 3},
+        {"text": "相当多时间", "score": 2},
+        {"text": "绝大部分或全部时间", "score": 1}
+      ]
+    },
+    {
+      "number": 7,
+      "text": "我发觉我的体重在下降",
+      "options": [
+        {"text": "没有或很少时间", "score": 1},
+        {"text": "小部分时间", "score": 2},
+        {"text": "相当多时间", "score": 3},
+        {"text": "绝大部分或全部时间", "score": 4}
+      ]
+    },
+    {
+      "number": 8,
+      "text": "我有便秘的苦恼",
+      "options": [
+        {"text": "没有或很少时间", "score": 1},
+        {"text": "小部分时间", "score": 2},
+        {"text": "相当多时间", "score": 3},
+        {"text": "绝大部分或全部时间", "score": 4}
+      ]
+    },
+    {
+      "number": 9,
+      "text": "我心跳比平时快",
+      "options": [
+        {"text": "没有或很少时间", "score": 1},
+        {"text": "小部分时间", "score": 2},
+        {"text": "相当多时间", "score": 3},
+        {"text": "绝大部分或全部时间", "score": 4}
+      ]
+    },
+    {
+      "number": 10,
+      "text": "我无缘无故感到疲乏",
+      "options": [
+        {"text": "没有或很少时间", "score": 1},
+        {"text": "小部分时间", "score": 2},
+        {"text": "相当多时间", "score": 3},
+        {"text": "绝大部分或全部时间", "score": 4}
+      ]
+    },
+    {
+      "number": 11,
+      "text": "我的头脑和平时一样清楚",
+      "options": [
+        {"text": "没有或很少时间", "score": 4},
+        {"text": "小部分时间", "score": 3},
+        {"text": "相当多时间", "score": 2},
+        {"text": "绝大部分或全部时间", "score": 1}
+      ]
+    },
+    {
+      "number": 12,
+      "text": "我觉得经常做的事情并没有困难",
+      "options": [
+        {"text": "没有或很少时间", "score": 4},
+        {"text": "小部分时间", "score": 3},
+        {"text": "相当多时间", "score": 2},
+        {"text": "绝大部分或全部时间", "score": 1}
+      ]
+    },
+    {
+      "number": 13,
+      "text": "我觉得不安而平静不下来",
+      "options": [
+        {"text": "没有或很少时间", "score": 1},
+        {"text": "小部分时间", "score": 2},
+        {"text": "相当多时间", "score": 3},
+        {"text": "绝大部分或全部时间", "score": 4}
+      ]
+    },
+    {
+      "number": 14,
+      "text": "我对将来抱有希望",
+      "options": [
+        {"text": "没有或很少时间", "score": 4},
+        {"text": "小部分时间", "score": 3},
+        {"text": "相当多时间", "score": 2},
+        {"text": "绝大部分或全部时间", "score": 1}
+      ]
+    },
+    {
+      "number": 15,
+      "text": "我比平常容易激动",
+      "options": [
+        {"text": "没有或很少时间", "score": 1},
+        {"text": "小部分时间", "score": 2},
+        {"text": "相当多时间", "score": 3},
+        {"text": "绝大部分或全部时间", "score": 4}
+      ]
+    },
+    {
+      "number": 16,
+      "text": "我觉得做出决定是容易的",
+      "options": [
+        {"text": "没有或很少时间", "score": 4},
+        {"text": "小部分时间", "score": 3},
+        {"text": "相当多时间", "score": 2},
+        {"text": "绝大部分或全部时间", "score": 1}
+      ]
+    },
+    {
+      "number": 17,
+      "text": "我觉得自己是个有用的人，有人需要我",
+      "options": [
+        {"text": "没有或很少时间", "score": 4},
+        {"text": "小部分时间", "score": 3},
+        {"text": "相当多时间", "score": 2},
+        {"text": "绝大部分或全部时间", "score": 1}
+      ]
+    },
+    {
+      "number": 18,
+      "text": "我的生活过得很有意思",
+      "options": [
+        {"text": "没有或很少时间", "score": 4},
+        {"text": "小部分时间", "score": 3},
+        {"text": "相当多时间", "score": 2},
+        {"text": "绝大部分或全部时间", "score": 1}
+      ]
+    },
+    {
+      "number": 19,
+      "text": "我认为如果我死了别人会生活的更好些",
+      "options": [
+        {"text": "没有或很少时间", "score": 1},
+        {"text": "小部分时间", "score": 2},
+        {"text": "相当多时间", "score": 3},
+        {"text": "绝大部分或全部时间", "score": 4}
+      ]
+    },
+    {
+      "number": 20,
+      "text": "平常感兴趣的事我仍然照样感兴趣",
+      "options": [
+        {"text": "没有或很少时间", "score": 4},
+        {"text": "小部分时间", "score": 3},
+        {"text": "相当多时间", "score": 2},
+        {"text": "绝大部分或全部时间", "score": 1}
+      ]
+    }
+  ],
+  "results": [
+    {
+      "range": {"min": 0, "max": 40},
+      "conclusion": "经过检测您【无抑郁】，希望您继续保持良好的心情。（以上测试结果仅供参考）"
+    },
+    {
+      "range": {"min": 40, "max": 47},
+      "conclusion": "经过检测您为【轻微至轻度抑郁】，为了您和家人的幸福，建议您联系我们，进行更专业的检测。（以上测试结果仅供参考）"
+    },
+    {
+      "range": {"min": 48, "max": 55},
+      "conclusion": "经过检测您为【中至重度抑郁】，为了您和家人的幸福，建议您联系我们，进行更专业的检测。（以上测试结果仅供参考）"
+    },
+    {
+      "range": {"min": 56, "max": 80},
+      "conclusion": "经过检测您为【重度抑郁】，为了您和家人的幸福，建议您联系我们，进行更专业的检测。（以上测试结果仅供参考）"
+    }
+  ]
+}

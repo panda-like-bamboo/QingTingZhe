@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}用户管理 - 倾听者原型后台{% endblock %}
+
+{% block content %}
+    <h2>用户管理</h2>
+
+    <table class="user-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>用户名</th>
+                <th>邮箱</th>
+                <th>姓名</th>
+                <th>是否激活</th>
+                <th>是否管理员</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email if user.email else 'N/A' }}</td>
+                <td>{{ user.full_name if user.full_name else 'N/A' }}</td>
+                <td>{{ '是' if user.is_active else '否' }}</td>
+                <td>{{ '是' if user.is_superuser else '否' }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">没有用户数据</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p><a href="{{ url_for('dashboard') }}">返回功能列表</a></p>
+{% endblock %}

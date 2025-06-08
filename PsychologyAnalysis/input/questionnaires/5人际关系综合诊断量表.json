@@ -1,0 +1,244 @@
+{
+    "title": "人际关系综合诊断量表",
+    "description": "这是一份人际关系行为困扰的诊断量表，共28个问题，每个问题做“是”（打 √）或“非”（打×）两种回答。请你根究自己的实际情况如实回答，答案没有对错之分：",
+    "questions": [
+      {
+        "number": 1,
+        "text": "关于自己的烦恼有口难言。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 2,
+        "text": "和生人见面感觉不自然。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 3,
+        "text": "过分地羡慕和妒忌别人。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 4,
+        "text": "与异性交往太少。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 5,
+        "text": "对连续不断地会谈感到困难。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 6,
+        "text": "在社交场合，感到紧张。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 7,
+        "text": "时常伤害别人。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 8,
+        "text": "与异性来往感觉不自然。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 9,
+        "text": "与一大群朋友在一起，常感到孤寂或失落。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 10,
+        "text": "极易受窘。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 11,
+        "text": "与别人不能和睦相处。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 12,
+        "text": "不知道与异性相处如何适可而止。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 13,
+        "text": "当不熟悉的人对自己倾诉他的生平遭遇以求同情时，自己常感到不知所措。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 14,
+        "text": "担心别人对自己有什么坏印象。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 15,
+        "text": "总是尽力使别人赏识自己。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 16,
+        "text": "暗自思慕异性。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 17,
+        "text": "时常避免表达自己的感受。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 18,
+        "text": "对自己的仪表（容貌）缺乏信心。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 19,
+        "text": "讨厌某人或被某人所讨厌。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 20,
+        "text": "瞧不起异性。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 21,
+        "text": "不能专注地倾听。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 22,
+        "text": "自己的烦恼无人可倾诉。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 23,
+        "text": "受别人排斥与冷漠。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 24,
+        "text": "被异性瞧不起。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 25,
+        "text": "不能广泛地听取各种各样意见、看法。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 26,
+        "text": "自己常因受伤害而暗自伤心。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 27,
+        "text": "常被别人谈论、愚弄。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      },
+      {
+        "number": 28,
+        "text": "与异性交往不知如何更好相处。",
+        "options": [
+          {"text": "是", "score": 1},
+          {"text": "非", "score": 0}
+        ]
+      }
+    ],
+    "results": [
+      {
+        "range": {"min": 0, "max": 8},
+        "conclusion": "说明你在与朋友相处上的困扰较少。你善于交谈，性格比较开朗，主动，关心别人，你对周围的朋友都比较好，愿意和他们在一起，他们也都喜欢你，你们相处得不错。而且，你能够从与朋友相处中，得到乐趣。你的生活是比较充实而且丰富多彩的，你与异性朋友也相处得比较好。一句话，你不存在或较少存在交友方面的困扰，你善于与朋友相处，人缘很好，获得许多的好感与赞同。"
+      },
+      {
+        "range": {"min": 9, "max": 14},
+        "conclusion": "你与朋友相处存在一定程度的困扰。你的人缘很一般，换句话说，你和朋友的关系并不牢固，时好时坏，经常处在一种起伏波动之中。"
+      },
+      {
+        "range": {"min": 15, "max": 28},
+        "conclusion": "表明你在同朋友相处上的行为困扰较严重，分数超过20分，则表明你的人际关系困扰程度很严重，而且在心理上出现较为明显得障碍。你可能不善于交谈，也可能是一个性格孤僻的人，不开朗，或者有明显得自高自大、讨人嫌的行为。"
+      }
+    ]
+  }

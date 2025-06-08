@@ -1,0 +1,39 @@
+api_key: "sk-0ffc64dd9d614c0088ee28e3a072420a" # 确保这个也配置正确
+text_model: "qwen-plus"
+vision_model: "qwen-vl-plus" # 或者你选择的其他模型
+
+# 确保下面这部分存在且格式正确
+REPORT_PROMPT_TEMPLATE: |
+  请根据以下信息生成一份详细的心理分析报告，服务于警务工作场景。
+
+  **I. 被测者基础信息:**
+  姓名: {subject_info[name]}
+  性别: {subject_info[gender]}
+  身份证号: {subject_info[id_card]}
+  年龄: {subject_info[age]}
+  职业: {subject_info[occupation]}
+  案件名称: {subject_info[case_name]}
+  案件类型: {subject_info[case_type]}
+  人员身份: {subject_info[identity_type]}
+  人员类型: {subject_info[person_type]}
+  婚姻状况: {subject_info[marital_status]}
+  子女情况: {subject_info[children_info]}
+  有无犯罪前科: {criminal_record_text}
+  健康情况: {subject_info[health_status]}
+  手机号: {subject_info[phone_number]}
+  归属地: {subject_info[domicile]}
+
+  **II. 绘画分析 (基于AI对图片的描述):**
+  {description}
+
+  **III. 量表分析:**
+  量表类型: {questionnaire_type}
+  量表得分: {score}
+  量表答案详情 (JSON):
+  {questionnaire}
+  初步解释: {scale_interpretation}
+
+  **IV. 综合心理状态分析与建议:**
+  请结合以上所有信息（基础信息、绘画分析、量表结果），进行深入的心理状态评估，提取关键人格特征，并针对警务工作场景（如未成年人犯罪预防、在押人员管理、上访户调解、民辅警关怀等，根据人员类型判断侧重点）给出具体的风险评估、干预建议或沟通策略。分析需专业、客观、有条理。报告应直接开始分析内容，无需重复引言。
+
+  --- 分析报告正文 ---

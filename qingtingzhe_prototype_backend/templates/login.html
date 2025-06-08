@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}登录 - 倾听者原型后台{% endblock %}
+
+{% block content %}
+<div class="login-page">
+    <h1>倾听者心理分析系统 - 后台原型</h1>
+    <h2>登录</h2>
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <form method="post">
+        <div class="form-group">
+            <label for="username">用户名:</label>
+            <input type="text" id="username" name="username" required value="admin"> <!-- 预填 admin -->
+        </div>
+        <div class="form-group">
+            <label for="password">密码:</label>
+            <input type="password" id="password" name="password" required value="password"> <!-- 预填 password -->
+        </div>
+        <button type="submit" class="btn btn-block">登录</button>
+    </form>
+</div>
+{% endblock %}

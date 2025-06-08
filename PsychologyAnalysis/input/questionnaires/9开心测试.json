@@ -1,0 +1,19 @@
+{
+    "title": "开心测试",
+    "questions": [
+      {
+        "number": 1,
+        "text": "你今天开心吗？",
+        "options": [
+          {
+            "text": "开心",
+            "score": 1
+          },
+          {
+            "text": "悲伤",
+            "score": 0
+          }
+        ]
+      }
+    ]
+  }

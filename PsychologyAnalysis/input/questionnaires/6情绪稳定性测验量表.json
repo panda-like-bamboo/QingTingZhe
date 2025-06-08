@@ -1,0 +1,281 @@
+{
+    "title": "情绪稳定性测验量表",
+    "description": "请根据您的实际情况回答以下问题。",
+    "questions": [
+      {
+        "number": 1,
+        "text": "看到自己最近一次拍摄的照片，你有何想法？",
+        "options": [
+          {"text": "觉得不称心", "score": 2},
+          {"text": "觉得很好", "score": 0},
+          {"text": "觉得可以", "score": 1}
+        ]
+      },
+      {
+        "number": 2,
+        "text": "你是否想到若干年后有什么使自己极为不安的事？",
+        "options": [
+          {"text": "经常想到", "score": 2},
+          {"text": "从来没想到", "score": 0},
+          {"text": "偶而想到", "score": 1}
+        ]
+      },
+      {
+        "number": 3,
+        "text": "你是否被朋友、同事、同学起过绰号、挖苦过？",
+        "options": [
+          {"text": "这是常有的事", "score": 2},
+          {"text": "从来没有", "score": 0},
+          {"text": "偶尔有过", "score": 1}
+        ]
+      },
+      {
+        "number": 4,
+        "text": "你上床以后，是否经常再起来一次，看看门窗是否关好。",
+        "options": [
+          {"text": "经常如此", "score": 2},
+          {"text": "从不如此", "score": 0},
+          {"text": "偶尔如此", "score": 1}
+        ]
+      },
+      {
+        "number": 5,
+        "text": "你对与你关系最密切的人是否满意？",
+        "options": [
+          {"text": "不满意", "score": 2},
+          {"text": "非常满意", "score": 0},
+          {"text": "基本满意", "score": 1}
+        ]
+      },
+      {
+        "number": 6,
+        "text": "你在半夜的时候，是否经常觉得有什么值得害怕的事？",
+        "options": [
+          {"text": "经常", "score": 2},
+          {"text": "从来没有", "score": 0},
+          {"text": "极少有这种情况", "score": 1}
+        ]
+      },
+      {
+        "number": 7,
+        "text": "你是否经常梦见什么可怕的事而惊醒？",
+        "options": [
+          {"text": "经常", "score": 2},
+          {"text": "没有", "score": 0},
+          {"text": "极少", "score": 1}
+        ]
+      },
+      {
+        "number": 8,
+        "text": "你是否曾经多次做同一个梦的情况？",
+        "options": [
+          {"text": "有", "score": 2},
+          {"text": "没有", "score": 0},
+          {"text": "记不清", "score": 1}
+        ]
+      },
+      {
+        "number": 9,
+        "text": "有没有一种食物使你吃后呕吐？",
+        "options": [
+          {"text": "有", "score": 2},
+          {"text": "没有", "score": 0},
+          {"text": "记不清", "score": 1}
+        ]
+      },
+      {
+        "number": 10,
+        "text": "除去看见的世界外，你心理有没有另一种世界？",
+        "options": [
+          {"text": "有", "score": 2},
+          {"text": "没有", "score": 0},
+          {"text": "记不清", "score": 1}
+        ]
+      },
+      {
+        "number": 11,
+        "text": "你心里是否时常觉得你不是现在的父母所生？",
+        "options": [
+          {"text": "时常", "score": 2},
+          {"text": "没有", "score": 0},
+          {"text": "偶尔有", "score": 1}
+        ]
+      },
+      {
+        "number": 12,
+        "text": "你是否曾经觉得有一个人爱你或尊敬你?",
+        "options": [
+          {"text": "是", "score": 2},
+          {"text": "否", "score": 0},
+          {"text": "说不清", "score": 1}
+        ]
+      },
+      {
+        "number": 13,
+        "text": "你是否常常觉得你的家庭对你不好，但是你又确知他们的确对你好？",
+        "options": [
+          {"text": "是", "score": 2},
+          {"text": "否", "score": 0},
+          {"text": "偶尔", "score": 1}
+        ]
+      },
+      {
+        "number": 14,
+        "text": "你是否觉得没有人十分了解你？",
+        "options": [
+          {"text": "是", "score": 2},
+          {"text": "否", "score": 0},
+          {"text": "偶尔", "score": 1}
+        ]
+      },
+      {
+        "number": 15,
+        "text": "你在早晨起来的时候最经常的感觉是什么？",
+        "options": [
+          {"text": "秋雨霏霏或枯叶遍地", "score": 2},
+          {"text": "秋高气爽或艳阳天", "score": 0},
+          {"text": "不清楚", "score": 1}
+        ]
+      },
+      {
+        "number": 16,
+        "text": "你在高处的时候，是否觉得站不稳？",
+        "options": [
+          {"text": "是", "score": 2},
+          {"text": "否", "score": 0},
+          {"text": "有时是这样", "score": 1}
+        ]
+      },
+      {
+        "number": 17,
+        "text": "你平时是否觉得自己很强健？",
+        "options": [
+          {"text": "是", "score": 2},
+          {"text": "否", "score": 0},
+          {"text": "不清楚", "score": 1}
+        ]
+      },
+      {
+        "number": 18,
+        "text": "你是否一回家就立刻把门关上？",
+        "options": [
+          {"text": "是", "score": 2},
+          {"text": "否", "score": 0},
+          {"text": "不清楚", "score": 1}
+        ]
+      },
+      {
+        "number": 19,
+        "text": "你坐在小房间里把门关上后，是否觉得心理不安？",
+        "options": [
+          {"text": "是", "score": 2},
+          {"text": "否", "score": 0},
+          {"text": "偶尔是", "score": 1}
+        ]
+      },
+      {
+        "number": 20,
+        "text": "当一件事需要你做决定时，你是否觉得很难？",
+        "options": [
+          {"text": "是", "score": 2},
+          {"text": "否", "score": 0},
+          {"text": "偶尔是", "score": 1}
+        ]
+      },
+      {
+        "number": 21,
+        "text": "你是否常常用抛硬币、玩纸牌、抽签之类的游戏来测凶吉？",
+        "options": [
+          {"text": "是", "score": 2},
+          {"text": "否", "score": 0},
+          {"text": "偶尔", "score": 1}
+        ]
+      },
+      {
+        "number": 22,
+        "text": "你是否常常因为碰到东西而跌到？",
+        "options": [
+          {"text": "是", "score": 2},
+          {"text": "否", "score": 0},
+          {"text": "偶尔", "score": 1}
+        ]
+      },
+      {
+        "number": 23,
+        "text": "你是否需要一个多小时才能入睡，或醒的比你希望的早一个小时？",
+        "options": [
+          {"text": "经常这样", "score": 2},
+          {"text": "从不这样", "score": 0},
+          {"text": "偶尔这样", "score": 1}
+        ]
+      },
+      {
+        "number": 24,
+        "text": "你是否经常看到、听到或感觉到别人觉察不到的东西？",
+        "options": [
+          {"text": "经常这样", "score": 2},
+          {"text": "从不这样", "score": 0},
+          {"text": "偶尔这样", "score": 1}
+        ]
+      },
+      {
+        "number": 25,
+        "text": "你是否觉得自己有超越常人的能力？",
+        "options": [
+          {"text": "是", "score": 2},
+          {"text": "否", "score": 0},
+          {"text": "不清楚", "score": 1}
+        ]
+      },
+      {
+        "number": 26,
+        "text": "你是否曾经觉得因有人跟你走而心理不安？",
+        "options": [
+          {"text": "是", "score": 2},
+          {"text": "否", "score": 0},
+          {"text": "不清楚", "score": 1}
+        ]
+      },
+      {
+        "number": 27,
+        "text": "你是否觉得有人在注意你的言行？",
+        "options": [
+          {"text": "是", "score": 2},
+          {"text": "否", "score": 0},
+          {"text": "不清楚", "score": 1}
+        ]
+      },
+      {
+        "number": 28,
+        "text": "当你一个人走夜路时，是否觉得前面潜藏着危险？",
+        "options": [
+          {"text": "是", "score": 2},
+          {"text": "否", "score": 0},
+          {"text": "偶尔", "score": 1}
+        ]
+      },
+      {
+        "number": 29,
+        "text": "你对别人自杀有什么想法？",
+        "options": [
+          {"text": "可以理解", "score": 2},
+          {"text": "不可思议", "score": 0},
+          {"text": "不清楚", "score": 1}
+        ]
+      }
+    ],
+    "results": [
+      {
+        "range": {"min": 0, "max": 20},
+        "conclusion": "表明你情绪稳定，自信心强，具有较强的美感、道德感和理智感。你有一定的社会活动能力，能理解周围人们的心情，顾全大局。你一定是个性爽朗、受人欢迎得人。"
+      },
+      {
+        "range": {"min": 21, "max": 40},
+        "conclusion": "说明你情绪基本稳定，但较为深沉，对事情的考虑过于冷静，处世淡漠消极，不善于发挥自己的个性。你的自信心受到压抑，办事热情忽高忽低，瞻前顾后，踌躇不前。"
+      },
+      {
+        "range": {"min": 41, "max": 58},
+        "conclusion": "说明你的情绪极不稳定，日常烦恼太多，使自己的心情处于紧张和矛盾中。如果你得分在50分以上，则是一种危险信号，你务必请心理医生进一步诊断。"
+      }
+    ]
+  }

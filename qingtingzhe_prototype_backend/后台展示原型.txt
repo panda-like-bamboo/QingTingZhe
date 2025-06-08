@@ -1,0 +1,1828 @@
+Full Project Directory Tree:
+c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend
+    app.py
+    Combiner.py
+    project_text1.txt
+    requirements.txt
+    data
+        guidance_plan.txt
+        interrogation_template.json
+        interrogation_template.txt
+    static
+        css
+            style.css
+        js
+            charts.js
+    templates
+        base.html
+        dashboard.html
+        data_analysis.html
+        interrogation_edit.html
+        interrogation_input.html
+        interrogation_output.html
+        login.html
+        report_guidance_viewer.html
+        user_management.html
+    __pycache__
+        app.cpython-311.pyc
+=====
+
+Concatenated File Content (Filtered):
+FILE: c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend\app.py
+import os
+import json
+# Add copy for deep copying the template
+import copy
+from flask import (
+    Flask, render_template, request, redirect, url_for, session,
+    flash, jsonify, send_file, Response
+)
+
+# --- 配置 ---
+app = Flask(__name__)
+app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'a_very_insecure_default_secret_key_for_prototype')
+
+# --- 获取数据文件路径 ---
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, 'data')
+# --- 修改回 JSON 文件路径 ---
+INTERROGATION_TEMPLATE_PATH = os.path.join(DATA_DIR, 'interrogation_template.json')
+GUIDANCE_PLAN_PATH = os.path.join(DATA_DIR, 'guidance_plan.txt')
+
+# --- 模拟数据加载 (恢复 JSON 加载) ---
+try:
+    with open(INTERROGATION_TEMPLATE_PATH, 'r', encoding='utf-8') as f:
+        # --- 使用 json.load ---
+        INTERROGATION_TEMPLATE = json.load(f)
+except FileNotFoundError:
+    print(f"警告: 审讯模板文件未找到: {INTERROGATION_TEMPLATE_PATH}")
+    INTERROGATION_TEMPLATE = {"error": "模板文件丢失", "questions_answers": []} # Provide default structure
+except json.JSONDecodeError:
+     print(f"警告: 审讯模板文件 JSON 格式错误: {INTERROGATION_TEMPLATE_PATH}")
+     INTERROGATION_TEMPLATE = {"error": "模板文件格式错误", "questions_answers": []} # Provide default structure
+except Exception as e:
+    print(f"加载审讯模板时发生未知错误: {e}")
+    INTERROGATION_TEMPLATE = {"error": "加载模板时出错", "questions_answers": []}
+
+
+try:
+    with open(GUIDANCE_PLAN_PATH, 'r', encoding='utf-8') as f:
+        GUIDANCE_PLAN_TEXT = f.read()
+except FileNotFoundError:
+    print(f"警告: 指导方案文件未找到: {GUIDANCE_PLAN_PATH}")
+    GUIDANCE_PLAN_TEXT = "错误：指导方案文件丢失。"
+
+# (Keep MOCK_REPORT_ID_20_TEXT and MOCK_USERS as they were)
+MOCK_REPORT_ID_20_TEXT = """
+综合心理状态分析与建议
+... (rest of the text) ...
+"""
+MOCK_USERS = [
+    {"id": 1, "username": "admin", "email": "admin@example.com", "full_name": "管理员", "is_active": True, "is_superuser": True},
+    # ... (rest of the users) ...
+    {"id": 100, "username": "tech_guan", "email": "guan.tech@example.com", "full_name": "关技术员", "is_active": True, "is_superuser": False},
+]
+
+
+# --- 辅助函数 ---
+def login_required(f):
+    import functools
+    @functools.wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'logged_in' not in session:
+            flash('请先登录', 'warning')
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+# --- 路由 ---
+
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        if username == 'admin' and password == 'password':
+            session['logged_in'] = True
+            session['username'] = username
+            flash('登录成功!', 'success')
+            return redirect(url_for('dashboard'))
+        else:
+            flash('用户名或密码错误', 'danger')
+            return render_template('login.html', error="用户名或密码错误")
+    if 'logged_in' in session:
+        return redirect(url_for('dashboard'))
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    session.pop('username', None)
+    flash('您已成功退出登录', 'info')
+    return redirect(url_for('login'))
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    functions = [
+        "查询报告", "数据分析", "辅助智能审讯笔录",
+        "上访户情绪疏导", "未成年人犯罪心理辅导",
+        "民辅警心理评估报告", "用户管理"
+    ]
+    return render_template('dashboard.html', functions=functions)
+
+# --- 审讯笔录 ---
+@app.route('/interrogation/input')
+@login_required
+def interrogation_input():
+    return render_template('interrogation_input.html')
+
+@app.route('/interrogation/generate', methods=['POST'])
+@login_required
+def generate_interrogation_record():
+    """审讯笔录 - 生成可编辑的表单页面"""
+    basic_info = {
+        "name": request.form.get('name'),
+        "gender": request.form.get('gender'),
+        "id_card": request.form.get('id_card'),
+        "phone": request.form.get('phone'),
+        "address": request.form.get('address'),
+        # --- 模拟或计算其他信息 ---
+        "age": "未知", # TODO: Calculate from ID card if possible
+        "dob": "未知", # TODO: Extract from ID card if possible
+        "hukou": request.form.get('hukou', "未知"), # Add if hukou is in input form
+    }
+
+    # --- 使用深拷贝，避免修改原始模板 ---
+    if "error" in INTERROGATION_TEMPLATE:
+         flash(f"无法加载审讯模板: {INTERROGATION_TEMPLATE['error']}", "danger")
+         # 可以重定向回输入页或显示错误页
+         return redirect(url_for('interrogation_input'))
+
+    template_data = copy.deepcopy(INTERROGATION_TEMPLATE)
+
+    # --- 用 basic_info 填充 template_data ---
+    template_data['person_name'] = basic_info.get('name', template_data.get('person_name', ''))
+    template_data['person_gender'] = basic_info.get('gender', template_data.get('person_gender', ''))
+    template_data['person_id_type_number'] = basic_info.get('id_card', template_data.get('person_id_type_number', ''))
+    template_data['person_address'] = basic_info.get('address', template_data.get('person_address', ''))
+    template_data['person_contact'] = basic_info.get('phone', template_data.get('person_contact', ''))
+    template_data['person_age'] = basic_info.get('age', template_data.get('person_age', ''))
+    template_data['person_dob'] = basic_info.get('dob', template_data.get('person_dob', ''))
+    template_data['person_hukou'] = basic_info.get('hukou', template_data.get('person_hukou', ''))
+
+    # --- 传递填充后的数据到新的编辑模板 ---
+    return render_template('interrogation_edit.html',
+                           template_data=template_data)
+
+# --- 新增：处理编辑后提交的路由 ---
+@app.route('/interrogation/save', methods=['POST'])
+@login_required
+def save_interrogation_record():
+    """审讯笔录 - 保存编辑后的数据 (模拟)"""
+    edited_data = {}
+    # --- 重新构建数据结构 ---
+    # 获取所有表单字段
+    form_data = request.form.to_dict()
+
+    # 简单地将所有表单字段放入 edited_data (这不够健壮，需要精确映射)
+    # edited_data = form_data # 这会丢失 questions_answers 的结构
+
+    # --- 更精确地重建 JSON 结构 ---
+    # 1. 提取基本信息
+    for key in INTERROGATION_TEMPLATE.keys(): # Use original keys as guide
+        if key not in ['questions_answers', 'signature_section']:
+             edited_data[key] = form_data.get(key) # Get simple fields directly
+
+    # 2. 重建 questions_answers 列表
+    edited_qas = []
+    qa_indices = set()
+    # Find submitted question/answer indices (more robust than assuming fixed count)
+    for key in form_data:
+        if key.startswith('questions_answers[') and key.endswith('][q]'):
+            index = key.split('[')[1].split(']')[0]
+            qa_indices.add(int(index))
+        elif key.startswith('questions_answers[') and key.endswith('][a]'):
+            index = key.split('[')[1].split(']')[0]
+            qa_indices.add(int(index))
+
+    for i in sorted(list(qa_indices)): # Process in order
+         q_key = f'questions_answers[{i}][q]'
+         a_key = f'questions_answers[{i}][a]'
+         question = form_data.get(q_key, "") # Default to empty string if missing
+         answer = form_data.get(a_key, "")   # Default to empty string if missing
+         edited_qas.append({"q": question, "a": answer})
+    edited_data['questions_answers'] = edited_qas
+
+    # 3. 重建 signature_section 字典
+    edited_data['signature_section'] = {}
+    sig_template = INTERROGATION_TEMPLATE.get('signature_section', {})
+    for key in sig_template.keys():
+         # Naming convention in HTML should be signature_section[key_name]
+         form_key = f'signature_section[{key}]'
+         edited_data['signature_section'][key] = form_data.get(form_key, sig_template[key]) # Get from form or default
+
+    # --- 模拟保存 ---
+    print("--- RECEIVED EDITED RECORD DATA ---")
+    print(json.dumps(edited_data, ensure_ascii=False, indent=2))
+    # In a real app: save edited_data to a database or a new file
+
+    flash('笔录已更新 (模拟保存成功)', 'success')
+    # 可以重定向到查看页面，或者 dashboard
+    return redirect(url_for('dashboard'))
+
+# --- PDF 下载路由（保持不变，或修改为基于已保存数据生成） ---
+@app.route('/interrogation/pdf')
+@login_required
+def download_interrogation_pdf():
+    # TODO: Implement PDF generation based on saved/edited data
+    return Response("PDF 生成功能待实现", mimetype='text/plain', status=501)
+
+# --- 其他路由 (保持不变) ---
+@app.route('/petitioner-guidance', methods=['GET', 'POST'])
+@login_required
+def view_petitioner_guidance():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        id_card = request.form.get('id_card')
+        print(f"查询上访户: {name}, 身份证: {id_card}")
+        report_text = MOCK_REPORT_ID_20_TEXT
+        guidance_text = GUIDANCE_PLAN_TEXT
+        return render_template('report_guidance_viewer.html',
+                               title=f"{name} - 上访户情绪疏导",
+                               report_text=report_text,
+                               guidance_text=guidance_text,
+                               guidance_title="上访户情绪疏导方案",
+                               show_input_form=False,
+                               back_link=url_for('view_petitioner_guidance'))
+    return render_template('report_guidance_viewer.html',
+                            title="上访户情绪疏导",
+                            show_input_form=True)
+
+@app.route('/juvenile-counseling', methods=['GET', 'POST'])
+@login_required
+def view_juvenile_counseling():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        id_card = request.form.get('id_card')
+        print(f"查询未成年人: {name}, 身份证: {id_card}")
+        report_text = MOCK_REPORT_ID_20_TEXT
+        guidance_text = GUIDANCE_PLAN_TEXT
+        return render_template('report_guidance_viewer.html',
+                               title=f"{name} - 未成年人心理辅导",
+                               report_text=report_text,
+                               guidance_text=guidance_text,
+                               guidance_title="未成年人犯罪心理辅导方案",
+                               show_input_form=False,
+                               back_link=url_for('view_juvenile_counseling'))
+    return render_template('report_guidance_viewer.html',
+                           title="未成年人犯罪心理辅导",
+                           show_input_form=True)
+
+@app.route('/police-report')
+@login_required
+def view_police_report():
+    report_text = MOCK_REPORT_ID_20_TEXT
+    guidance_text = """
+    关于提升民辅警队伍心理健康水平的若干建议
+    ... (rest of guidance text) ...
+    """
+    return render_template('report_guidance_viewer.html',
+                           title="民辅警心理评估报告",
+                           report_text=report_text,
+                           guidance_text=guidance_text,
+                           guidance_title="民辅警心理调适建议",
+                           show_input_form=False)
+
+@app.route('/data-analysis')
+@login_required
+def data_analysis():
+    return render_template('data_analysis.html')
+
+@app.route('/api/data-analysis')
+def data_analysis_api():
+    mock_data = {
+        'ageData': {'labels': ['<18', '18-25', '26-35', '36-45', '46-55', '56+'], 'values': [8, 35, 50, 28, 18, 10]},
+        'genderData': {'labels': ['男', '女', '其他'], 'values': [70, 45, 3]}
+    }
+    return jsonify(mock_data)
+
+@app.route('/user-management')
+@login_required
+def user_management():
+    return render_template('user_management.html', users=MOCK_USERS)
+
+
+# --- 运行 ---
+if __name__ == '__main__':
+    os.makedirs(DATA_DIR, exist_ok=True)
+    static_css_dir = os.path.join(BASE_DIR, 'static', 'css')
+    static_js_dir = os.path.join(BASE_DIR, 'static', 'js')
+    os.makedirs(static_css_dir, exist_ok=True)
+    os.makedirs(static_js_dir, exist_ok=True)
+    print(f"确保目录存在:\n  Data: {DATA_DIR}\n  Static CSS: {static_css_dir}\n  Static JS: {static_js_dir}")
+
+    # --- 确保模板文件存在 (如果不存在，可以创建一个空的JSON) ---
+    if not os.path.exists(INTERROGATION_TEMPLATE_PATH):
+        print(f"创建空的审讯模板文件: {INTERROGATION_TEMPLATE_PATH}")
+        empty_template = {
+          "record_number": "第 N 次", "title": "讯问笔录", "time_start": "", "time_end": "", "location": "",
+          "interrogator_signature": "", "interrogator_unit": "", "recorder_signature": "", "recorder_unit": "",
+          "person_name": "", "person_gender": "", "person_age": "", "person_dob": "", "person_id_type_number": "",
+          "person_address": "", "person_contact": "", "person_hukou": "", "arrival_departure_info": "",
+          "questions_answers": [{"q": "问题示例1?", "a": "回答示例1"}, {"q": "问题示例2?", "a": ""}],
+          "signature_section": {"person_signature": "被讯问人：", "date": "时    间：    年   月   日"}
+        }
+        try:
+            with open(INTERROGATION_TEMPLATE_PATH, 'w', encoding='utf-8') as f:
+                json.dump(empty_template, f, ensure_ascii=False, indent=2)
+        except IOError as e:
+            print(f"创建空模板文件失败: {e}")
+
+
+    app.run(debug=True, host='0.0.0.0', port=5001)
+-----
+FILE: c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend\Combiner.py
+import os
+import sys
+from tqdm import tqdm
+
+# 定义允许被合并内容的文件扩展名
+ALLOWED_EXTENSIONS_FOR_CONTENT = ('.py', '.txt', '.md', '.json', '.xml', '.html', '.css', '.js', '.csv')
+
+# --- 恢复 generate_tree 到原始版本，以包含所有文件 ---
+def generate_tree(root_dir):
+    """生成类似 tree /f 的目录树字符串 (包含所有文件和目录)"""
+    tree_output = [root_dir]
+    # os.walk 会自然遍历所有子目录和文件
+    for root, dirs, files in os.walk(root_dir):
+        level = root.replace(root_dir, '').count(os.sep)
+        indent = '    ' * level
+        if level > 0:  # 避免重复输出根目录
+            tree_output.append(f"{indent}{os.path.basename(root)}")
+        
+        # --- 在目录树中列出该目录下的所有文件 ---
+        sub_indent = indent + '    '
+        for file in files:
+            # 不进行扩展名过滤，列出所有文件
+            tree_output.append(f"{sub_indent}{file}")
+            
+    return "\n".join(tree_output)
+
+def concatenate_files(root_dir, output_file):
+    # 计算总文件数以初始化进度条 (反映遍历的所有文件)
+    total_files = sum(len(files) for _, _, files in os.walk(root_dir))
+
+    # 预计算将被合并内容的文件数（可选，如果你想让进度条只反映合并进度）
+    # included_files_count = 0
+    # for root, dirs, files in os.walk(root_dir):
+    #     for file in files:
+    #         _, ext = os.path.splitext(file)
+    #         if ext.lower() in ALLOWED_EXTENSIONS_FOR_CONTENT:
+    #             included_files_count += 1
+    # print(f"找到 {included_files_count} 个符合条件的文件将被合并内容。")
+
+
+    with open(output_file, 'w', encoding='utf-8') as outfile:
+        # --- 写入完整的目录树 ---
+        outfile.write("Full Project Directory Tree:\n") # 标题明确说明是完整树
+        outfile.write(generate_tree(root_dir) + "\n") # 调用未经过滤的 generate_tree
+        outfile.write("=====\n\n")
+        outfile.write("Concatenated File Content (Filtered):\n") # 明确说明内容是过滤后的
+
+        # 使用 tqdm 显示进度条 (total 仍然是所有文件数，反映遍历进度)
+        # 如果使用上面的 included_files_count，这里改为 total=included_files_count
+        with tqdm(total=total_files, desc="扫描文件并合并内容", unit="file") as pbar:
+            for root, dirs, files in os.walk(root_dir):
+                for file in files:
+                    file_path = os.path.join(root, file)
+
+                    # --- 核心过滤逻辑：只处理指定扩展名的文件内容 ---
+                    _, ext = os.path.splitext(file)
+
+                    # 检查扩展名是否在允许合并内容的列表中
+                    if ext.lower() in ALLOWED_EXTENSIONS_FOR_CONTENT:
+                        # --- 文件内容合并逻辑 ---
+                        try:
+                            with open(file_path, 'r', encoding='utf-8') as infile:
+                                content = infile.read()
+                                outfile.write("FILE: " + file_path + "\n")
+                                outfile.write(content + "\n")
+                                outfile.write("-----\n")
+                            print(f"已合并内容: {file_path} - 成功")
+                        except Exception as e:
+                            # 即使读取失败，也记录下来
+                            outfile.write(f"FILE: {file_path}\n")
+                            outfile.write(f"读取文件出错 (尝试合并内容时): {str(e)}\n")
+                            outfile.write("-----\n")
+                            print(f"尝试合并内容失败: {file_path} - 错误: {str(e)}")
+                    else:
+                        # --- 文件类型不符，跳过内容合并 ---
+                        # 不需要写入文件内容，只在控制台打印信息
+                        print(f"已跳过内容合并 (类型不符): {file_path}")
+
+                    # --- 更新进度条 ---
+                    # 每个访问的文件都更新进度条
+                    pbar.update(1)
+
+if __name__ == "__main__":
+    root_dir = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
+    output_file = 'project_text1.txt'
+    print(f"正在扫描目录: {root_dir}")
+    print(f"将生成包含所有文件的目录树，并合并后缀为 {', '.join(ALLOWED_EXTENSIONS_FOR_CONTENT)} 的文件内容到: {output_file}")
+    concatenate_files(root_dir, output_file)
+    print(f"处理完成。输出文件: {output_file}")
+-----
+FILE: c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend\project_text1.txt
+Full Project Directory Tree:
+c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend
+    app.py
+    Combiner.py
+    project_text1.txt
+    requirements.txt
+    data
+        guidance_plan.txt
+        interrogation_template.json
+        interrogation_template.txt
+    static
+        css
+            style.css
+        js
+            charts.js
+    templates
+        base.html
+        dashboard.html
+        data_analysis.html
+        interrogation_edit.html
+        interrogation_input.html
+        interrogation_output.html
+        login.html
+        report_guidance_viewer.html
+        user_management.html
+    __pycache__
+        app.cpython-311.pyc
+=====
+
+Concatenated File Content (Filtered):
+FILE: c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend\app.py
+import os
+import json
+# Add copy for deep copying the template
+import copy
+from flask import (
+    Flask, render_template, request, redirect, url_for, session,
+    flash, jsonify, send_file, Response
+)
+
+# --- 配置 ---
+app = Flask(__name__)
+app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'a_very_insecure_default_secret_key_for_prototype')
+
+# --- 获取数据文件路径 ---
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, 'data')
+# --- 修改回 JSON 文件路径 ---
+INTERROGATION_TEMPLATE_PATH = os.path.join(DATA_DIR, 'interrogation_template.json')
+GUIDANCE_PLAN_PATH = os.path.join(DATA_DIR, 'guidance_plan.txt')
+
+# --- 模拟数据加载 (恢复 JSON 加载) ---
+try:
+    with open(INTERROGATION_TEMPLATE_PATH, 'r', encoding='utf-8') as f:
+        # --- 使用 json.load ---
+        INTERROGATION_TEMPLATE = json.load(f)
+except FileNotFoundError:
+    print(f"警告: 审讯模板文件未找到: {INTERROGATION_TEMPLATE_PATH}")
+    INTERROGATION_TEMPLATE = {"error": "模板文件丢失", "questions_answers": []} # Provide default structure
+except json.JSONDecodeError:
+     print(f"警告: 审讯模板文件 JSON 格式错误: {INTERROGATION_TEMPLATE_PATH}")
+     INTERROGATION_TEMPLATE = {"error": "模板文件格式错误", "questions_answers": []} # Provide default structure
+except Exception as e:
+    print(f"加载审讯模板时发生未知错误: {e}")
+    INTERROGATION_TEMPLATE = {"error": "加载模板时出错", "questions_answers": []}
+
+
+try:
+    with open(GUIDANCE_PLAN_PATH, 'r', encoding='utf-8') as f:
+        GUIDANCE_PLAN_TEXT = f.read()
+except FileNotFoundError:
+    print(f"警告: 指导方案文件未找到: {GUIDANCE_PLAN_PATH}")
+    GUIDANCE_PLAN_TEXT = "错误：指导方案文件丢失。"
+
+# (Keep MOCK_REPORT_ID_20_TEXT and MOCK_USERS as they were)
+MOCK_REPORT_ID_20_TEXT = """
+综合心理状态分析与建议
+... (rest of the text) ...
+"""
+MOCK_USERS = [
+    {"id": 1, "username": "admin", "email": "admin@example.com", "full_name": "管理员", "is_active": True, "is_superuser": True},
+    # ... (rest of the users) ...
+    {"id": 100, "username": "tech_guan", "email": "guan.tech@example.com", "full_name": "关技术员", "is_active": True, "is_superuser": False},
+]
+
+
+# --- 辅助函数 ---
+def login_required(f):
+    import functools
+    @functools.wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'logged_in' not in session:
+            flash('请先登录', 'warning')
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+# --- 路由 ---
+
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        if username == 'admin' and password == 'password':
+            session['logged_in'] = True
+            session['username'] = username
+            flash('登录成功!', 'success')
+            return redirect(url_for('dashboard'))
+        else:
+            flash('用户名或密码错误', 'danger')
+            return render_template('login.html', error="用户名或密码错误")
+    if 'logged_in' in session:
+        return redirect(url_for('dashboard'))
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    session.pop('username', None)
+    flash('您已成功退出登录', 'info')
+    return redirect(url_for('login'))
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    functions = [
+        "查询报告", "数据分析", "辅助智能审讯笔录",
+        "上访户情绪疏导", "未成年人犯罪心理辅导",
+        "民辅警心理评估报告", "用户管理"
+    ]
+    return render_template('dashboard.html', functions=functions)
+
+# --- 审讯笔录 ---
+@app.route('/interrogation/input')
+@login_required
+def interrogation_input():
+    return render_template('interrogation_input.html')
+
+@app.route('/interrogation/generate', methods=['POST'])
+@login_required
+def generate_interrogation_record():
+    """审讯笔录 - 生成可编辑的表单页面"""
+    basic_info = {
+        "name": request.form.get('name'),
+        "gender": request.form.get('gender'),
+        "id_card": request.form.get('id_card'),
+        "phone": request.form.get('phone'),
+        "address": request.form.get('address'),
+        # --- 模拟或计算其他信息 ---
+        "age": "未知", # TODO: Calculate from ID card if possible
+        "dob": "未知", # TODO: Extract from ID card if possible
+        "hukou": request.form.get('hukou', "未知"), # Add if hukou is in input form
+    }
+
+    # --- 使用深拷贝，避免修改原始模板 ---
+    if "error" in INTERROGATION_TEMPLATE:
+         flash(f"无法加载审讯模板: {INTERROGATION_TEMPLATE['error']}", "danger")
+         # 可以重定向回输入页或显示错误页
+         return redirect(url_for('interrogation_input'))
+
+    template_data = copy.deepcopy(INTERROGATION_TEMPLATE)
+
+    # --- 用 basic_info 填充 template_data ---
+    template_data['person_name'] = basic_info.get('name', template_data.get('person_name', ''))
+    template_data['person_gender'] = basic_info.get('gender', template_data.get('person_gender', ''))
+    template_data['person_id_type_number'] = basic_info.get('id_card', template_data.get('person_id_type_number', ''))
+    template_data['person_address'] = basic_info.get('address', template_data.get('person_address', ''))
+    template_data['person_contact'] = basic_info.get('phone', template_data.get('person_contact', ''))
+    template_data['person_age'] = basic_info.get('age', template_data.get('person_age', ''))
+    template_data['person_dob'] = basic_info.get('dob', template_data.get('person_dob', ''))
+    template_data['person_hukou'] = basic_info.get('hukou', template_data.get('person_hukou', ''))
+
+    # --- 传递填充后的数据到新的编辑模板 ---
+    return render_template('interrogation_edit.html',
+                           template_data=template_data)
+
+# --- 新增：处理编辑后提交的路由 ---
+@app.route('/interrogation/save', methods=['POST'])
+@login_required
+def save_interrogation_record():
+    """审讯笔录 - 保存编辑后的数据 (模拟)"""
+    edited_data = {}
+    # --- 重新构建数据结构 ---
+    # 获取所有表单字段
+    form_data = request.form.to_dict()
+
+    # 简单地将所有表单字段放入 edited_data (这不够健壮，需要精确映射)
+    # edited_data = form_data # 这会丢失 questions_answers 的结构
+
+    # --- 更精确地重建 JSON 结构 ---
+    # 1. 提取基本信息
+    for key in INTERROGATION_TEMPLATE.keys(): # Use original keys as guide
+        if key not in ['questions_answers', 'signature_section']:
+             edited_data[key] = form_data.get(key) # Get simple fields directly
+
+    # 2. 重建 questions_answers 列表
+    edited_qas = []
+    qa_indices = set()
+    # Find submitted question/answer indices (more robust than assuming fixed count)
+    for key in form_data:
+        if key.startswith('questions_answers[') and key.endswith('][q]'):
+            index = key.split('[')[1].split(']')[0]
+            qa_indices.add(int(index))
+        elif key.startswith('questions_answers[') and key.endswith('][a]'):
+            index = key.split('[')[1].split(']')[0]
+            qa_indices.add(int(index))
+
+    for i in sorted(list(qa_indices)): # Process in order
+         q_key = f'questions_answers[{i}][q]'
+         a_key = f'questions_answers[{i}][a]'
+         question = form_data.get(q_key, "") # Default to empty string if missing
+         answer = form_data.get(a_key, "")   # Default to empty string if missing
+         edited_qas.append({"q": question, "a": answer})
+    edited_data['questions_answers'] = edited_qas
+
+    # 3. 重建 signature_section 字典
+    edited_data['signature_section'] = {}
+    sig_template = INTERROGATION_TEMPLATE.get('signature_section', {})
+    for key in sig_template.keys():
+         # Naming convention in HTML should be signature_section[key_name]
+         form_key = f'signature_section[{key}]'
+         edited_data['signature_section'][key] = form_data.get(form_key, sig_template[key]) # Get from form or default
+
+    # --- 模拟保存 ---
+    print("--- RECEIVED EDITED RECORD DATA ---")
+    print(json.dumps(edited_data, ensure_ascii=False, indent=2))
+    # In a real app: save edited_data to a database or a new file
+
+    flash('笔录已更新 (模拟保存成功)', 'success')
+    # 可以重定向到查看页面，或者 dashboard
+    return redirect(url_for('dashboard'))
+
+# --- PDF 下载路由（保持不变，或修改为基于已保存数据生成） ---
+@app.route('/interrogation/pdf')
+@login_required
+def download_interrogation_pdf():
+    # TODO: Implement PDF generation based on saved/edited data
+    return Response("PDF 生成功能待实现", mimetype='text/plain', status=501)
+
+# --- 其他路由 (保持不变) ---
+@app.route('/petitioner-guidance', methods=['GET', 'POST'])
+@login_required
+def view_petitioner_guidance():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        id_card = request.form.get('id_card')
+        print(f"查询上访户: {name}, 身份证: {id_card}")
+        report_text = MOCK_REPORT_ID_20_TEXT
+        guidance_text = GUIDANCE_PLAN_TEXT
+        return render_template('report_guidance_viewer.html',
+                               title=f"{name} - 上访户情绪疏导",
+                               report_text=report_text,
+                               guidance_text=guidance_text,
+                               guidance_title="上访户情绪疏导方案",
+                               show_input_form=False,
+                               back_link=url_for('view_petitioner_guidance'))
+    return render_template('report_guidance_viewer.html',
+                            title="上访户情绪疏导",
+                            show_input_form=True)
+
+@app.route('/juvenile-counseling', methods=['GET', 'POST'])
+@login_required
+def view_juvenile_counseling():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        id_card = request.form.get('id_card')
+        print(f"查询未成年人: {name}, 身份证: {id_card}")
+        report_text = MOCK_REPORT_ID_20_TEXT
+        guidance_text = GUIDANCE_PLAN_TEXT
+        return render_template('report_guidance_viewer.html',
+                               title=f"{name} - 未成年人心理辅导",
+                               report_text=report_text,
+                               guidance_text=guidance_text,
+                               guidance_title="未成年人犯罪心理辅导方案",
+                               show_input_form=False,
+                               back_link=url_for('view_juvenile_counseling'))
+    return render_template('report_guidance_viewer.html',
+                           title="未成年人犯罪心理辅导",
+                           show_input_form=True)
+
+@app.route('/police-report')
+@login_required
+def view_police_report():
+    report_text = MOCK_REPORT_ID_20_TEXT
+    guidance_text = """
+    关于提升民辅警队伍心理健康水平的若干建议
+    ... (rest of guidance text) ...
+    """
+    return render_template('report_guidance_viewer.html',
+                           title="民辅警心理评估报告",
+                           report_text=report_text,
+                           guidance_text=guidance_text,
+                           guidance_title="民辅警心理调适建议",
+                           show_input_form=False)
+
+@app.route('/data-analysis')
+@login_required
+def data_analysis():
+    return render_template('data_analysis.html')
+
+@app.route('/api/data-analysis')
+def data_analysis_api():
+    mock_data = {
+        'ageData': {'labels': ['<18', '18-25', '26-35', '36-45', '46-55', '56+'], 'values': [8, 35, 50, 28, 18, 10]},
+        'genderData': {'labels': ['男', '女', '其他'], 'values': [70, 45, 3]}
+    }
+    return jsonify(mock_data)
+
+@app.route('/user-management')
+@login_required
+def user_management():
+    return render_template('user_management.html', users=MOCK_USERS)
+
+
+# --- 运行 ---
+if __name__ == '__main__':
+    os.makedirs(DATA_DIR, exist_ok=True)
+    static_css_dir = os.path.join(BASE_DIR, 'static', 'css')
+    static_js_dir = os.path.join(BASE_DIR, 'static', 'js')
+    os.makedirs(static_css_dir, exist_ok=True)
+    os.makedirs(static_js_dir, exist_ok=True)
+    print(f"确保目录存在:\n  Data: {DATA_DIR}\n  Static CSS: {static_css_dir}\n  Static JS: {static_js_dir}")
+
+    # --- 确保模板文件存在 (如果不存在，可以创建一个空的JSON) ---
+    if not os.path.exists(INTERROGATION_TEMPLATE_PATH):
+        print(f"创建空的审讯模板文件: {INTERROGATION_TEMPLATE_PATH}")
+        empty_template = {
+          "record_number": "第 N 次", "title": "讯问笔录", "time_start": "", "time_end": "", "location": "",
+          "interrogator_signature": "", "interrogator_unit": "", "recorder_signature": "", "recorder_unit": "",
+          "person_name": "", "person_gender": "", "person_age": "", "person_dob": "", "person_id_type_number": "",
+          "person_address": "", "person_contact": "", "person_hukou": "", "arrival_departure_info": "",
+          "questions_answers": [{"q": "问题示例1?", "a": "回答示例1"}, {"q": "问题示例2?", "a": ""}],
+          "signature_section": {"person_signature": "被讯问人：", "date": "时    间：    年   月   日"}
+        }
+        try:
+            with open(INTERROGATION_TEMPLATE_PATH, 'w', encoding='utf-8') as f:
+                json.dump(empty_template, f, ensure_ascii=False, indent=2)
+        except IOError as e:
+            print(f"创建空模板文件失败: {e}")
+
+
+    app.run(debug=True, host='0.0.0.0', port=5001)
+
+-----
+FILE: c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend\requirements.txt
+# qingtingzhe_prototype_backend/requirements.txt
+Flask>=2.0
+python-dotenv>=0.15 # 可选，如果需要 .env 文件
+-----
+FILE: c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend\data\guidance_plan.txt
+综合心理状态分析与建议
+
+一、心理状态评估
+
+基础信息解读
+李明为一名14岁的未成年人，无职业背景及犯罪前科记录。这一年龄段的个体通常处于青春期早期，情绪波动较大，自我认知尚未完全成熟，容易受到外界环境的影响。
+鉴于其年龄特征，李明可能正处于探索自我价值和身份认同的关键阶段，同时对家庭、学校或社会关系较为敏感。
+绘画分析
+空间布局与组织能力：从绘画中可以看出，李明展现出了较强的空间规划能力和逻辑思维。他通过网格划分房间区域，并合理安排家具位置，表现出清晰的目标导向和条理性。这表明他在日常生活中可能倾向于制定计划并追求秩序感。
+细节关注与创造力：画作中的沙发抱枕、绿植、吊灯等元素均经过精心设计，体现出李明对生活品质的关注以及一定的审美意识。此外，他对功能性（如电视柜作为隔断）和美观性（如装饰画、灯具造型）的兼顾，反映了其在处理问题时能够综合考虑多方面因素。
+情感表达与内心需求：整体画面呈现出宁静舒适的氛围，暗示李明希望构建一个安全、放松的心理空间。这种偏好可能与其当前的生活压力源相关，例如学业负担、人际关系紧张或其他潜在困扰。
+量表结果分析
+根据“HappyTest”量表得分（1分），初步判断李明当天的情绪状态较为积极。然而，单一时间点的评估无法全面反映其长期心理状况，仍需结合其他维度进行深入探讨。
+值得注意的是，青少年的情绪往往具有短暂性和情境依赖性。即使短期内表现愉快，也可能隐藏更深层次的问题（如焦虑、孤独感等），需要进一步观察验证。
+二、关键人格特征提取
+
+条理性和计划性：绘画中的空间布局和功能分区显示了李明较强的组织能力，说明他在面对复杂任务时可能具备较好的执行力。
+审美意识与创造力：对细节的关注以及现代简约风格的选择，体现了李明的艺术修养和创新思维。
+寻求安全感的需求：画面传递出的舒适感可能折射出其对稳定生活环境的渴望，这或许与其现实中的某些不安定因素有关。
+情绪稳定性待验证：尽管当前情绪表现为开心，但需警惕青春期特有的情绪起伏，避免因一时乐观而忽略潜在风险。
+三、警务工作场景下的具体建议
+
+（一）未成年人犯罪预防
+
+风险评估：
+虽然李明目前未涉及任何违法活动，但从其绘画中可见其注重规则与秩序，这可能是其遵守法律的基础。然而，若现实中缺乏足够支持系统（如家庭关怀、教育资源），可能导致其将注意力转向不良行为以寻求归属感。
+青春期个体易受同伴影响，应警惕其是否接触过不良社交圈。
+干预建议：
+提供正向引导：鼓励李明参与艺术创作、手工制作等活动，发挥其审美与创造力优势，同时培养团队合作精神。
+强化家庭教育：建议家长多关注孩子的情感需求，营造和谐的家庭氛围，减少可能引发负面情绪的冲突。
+建立支持网络：协助学校为其创造更多展示才能的机会，例如加入美术社团或参加设计比赛，增强自信心。
+（二）上访户调解
+
+若未来李明因某种原因成为上访人员，可参考以下策略：
+倾听与共情：利用其注重秩序的特点，在沟通中强调程序正义，耐心倾听诉求，帮助其明确解决问题的步骤。
+可视化方案：通过绘制图表或流程图等形式，清晰呈现解决方案，满足其对结构化信息的需求。
+（三）民辅警关怀
+
+在未来职业发展中，若李明选择从事警务相关工作，可采取如下措施：
+发挥特长：将其擅长的空间规划和细节管理能力应用于案件现场勘查或办公区域优化等领域。
+情绪管理培训：针对青春期情绪波动较大的特点，定期开展心理健康讲座，提升其应对压力的能力。
+四、总结
+
+综上所述，李明展现出良好的逻辑思维和艺术天赋，同时存在对安全感和稳定性的强烈需求。在警务工作场景中，应充分利用其优势，通过正向引导和支持体系的建设，降低潜在风险，促进其健康成长。同时，持续关注其情绪变化，及时介入干预，确保其心理状态始终处于健康水平。
+-----
+FILE: c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend\data\interrogation_template.json
+{
+    "record_number": "第 N 次",
+    "title": "讯问笔录（帮信嫌疑人）",
+    "time_start": "2025年4月1日00时00分",
+    "time_end": "2025年4月1日01时00分",
+    "location": "葫芦岛市执法办案管理中心询（讯）问室1",
+    "interrogator_signature": " ",
+    "interrogator_unit": "葫芦岛市公安局",
+    "recorder_signature": " ",
+    "recorder_unit": "葫芦岛市公安局",
+    "person_name": "{姓名}",
+    "person_gender": "{性别}",
+    "person_age": "{年龄}",
+    "person_dob": "{出生日期}",
+    "person_id_type_number": "{身份证号}",
+    "person_address": "{家庭住址}",
+    "person_contact": "{手机号}",
+    "person_hukou": "{户籍所在地}",
+    "arrival_departure_info": "（口头传唤∕被扭送∕自动投案的被讯问人    月    日    时    分到达，    月    日   时    分离开，本人签名                        ）",
+    "questions_answers": [
+      {
+        "q": "我们是葫芦岛市公安局的民警（出示人民警察证），现依法对你进行讯问，对我们的提问你应当如实回答，说假话作伪证要付法律责任。对与本案无关的问题，你有拒绝回答的权利，你听清楚了吗？",
+        "a": "听清楚了。"
+      },
+      {
+          "q": "因为你未满18周岁，现由你的母亲XXX陪同你进行讯问，你听明白了吗？",
+          "a": "(仅适用于未成年人) 我听明白了。"
+      },
+      {
+        "q": "这是一份《犯罪嫌疑人诉讼权利义务告知书》，你看一遍，是否理解上面的内容？",
+        "a": "（看《犯罪嫌疑人诉讼权利义务告知书》约2分钟）我看过了，理解上面的内容。"
+      },
+      {
+        "q": "你是否申请办案人员回避？",
+        "a": "不申请。"
+      },
+      {
+        "q": "你是否要求聘请律师？",
+        "a": "我委托我的母亲XXX为我聘请律师。 (或: 不要求)"
+      },
+      {
+        "q": "这是一份《葫芦岛市公安局认罪认罚从宽制度告知书》，你看一遍，是否理解上面的内容？",
+        "a": "（看《葫芦岛市公安局认罪认罚从宽制度告知书》约1分钟），我看完了，理解上面的内容。"
+      },
+      {
+        "q": "你是对否认罪认罚？",
+        "a": "我认罪认罚。"
+      },
+      {
+        "q": "你如果需要饮食或休息你可以随时提出，你现在是否需要饮食和休息？",
+        "a": "我现在不需要。"
+      },
+      {
+        "q": "你是否是人大代表或政协委员？",
+        "a": "都不是。"
+      },
+      {
+        "q": "你是否是中共党员？",
+        "a": "不是。"
+      },
+      {
+        "q": "你现在是做什么工作的？",
+        "a": "我在XXX工厂当工人。"
+      },
+      {
+        "q": "讲一下你的个人简历和家庭情况？",
+        "a": "我6岁-22岁读书，22岁至今在XXX工厂当工人。我的父亲：XXX，50岁，在XXX做XX工作；母亲：XXX，50岁，在XXX做XX工作；妻子： XXX，24岁，在XXX做XX工作。"
+      },
+      {
+        "q": "你是否受到过行政或刑事处罚？",
+        "a": " "
+      },
+      {
+        "q": "你因何事被传唤（或口头传唤等，根据实际情况写）到公安机关？",
+        "a": "我因为帮人转钱被传唤到公安机关。"
+      },
+      {
+        "q": "讲一下事情发生的时间地点？",
+        "a": " "
+      },
+      {
+        "q": "你是用哪张银行卡帮人转账？具体信息是什么？",
+        "a": " "
+      },
+      {
+        "q": "你一共用你的银行卡账号跑了多少流水？",
+        "a": " "
+      },
+      {
+        "q": "对方转给你多少钱？具体转账信息是什么？",
+        "a": " "
+      },
+      {
+        "q": "你转出多少钱？具体转账信息是什么？",
+        "a": " "
+      },
+      {
+        "q": "你一共获利多少钱？",
+        "a": " "
+      },
+      {
+        "q": "你知道上家转给你的钱是如何获得的？",
+        "a": " "
+      },
+      {
+        "q": "你是如何联系到上家的？",
+        "a": " "
+      },
+      {
+        "q": "上家是如何与你沟通的？（方式、用的工具）",
+        "a": " "
+      },
+      {
+        "q": "上家的详细信息是什么？",
+        "a": " "
+      },
+      {
+        "q": "你为什么用自己的银行卡给别人转账？",
+        "a": " "
+      },
+      {
+        "q": "你转出的账号信息是什么？谁提供给你的？",
+        "a": " "
+      },
+      {
+        "q": "你是否知道用银行卡帮别人转钱是违法行为？",
+        "a": " "
+      },
+      {
+        "q": "你获利xx元，但受害人因诈骗损失xx万元导致自杀未遂，这种交易值得吗？",
+        "a": " "
+      },
+      {
+        "q": "继续隐瞒将面临3年以上刑期，主动退赃可争取缓刑，你选择哪条路？",
+        "a": " "
+      },
+      {
+        "q": "你每转账10万元获利500元，但造成被害人平均损失率高达92%，这种比率合理吗？",
+        "a": " "
+      },
+      {
+        "q": "你有什么证据向公安机关提供吗？",
+        "a": " "
+      },
+      {
+        "q": "你还有什么要补充的吗？",
+        "a": "没有。"
+      },
+      {
+        "q": "以上所说是否属实？",
+        "a": "属实。"
+      },
+      {
+        "q": "以上笔录你看一下，和你说的是否相符？",
+        "a": " "
+      }
+    ],
+    "signature_section": {
+      "person_signature": "被讯问人：",
+      "date": "时    间：    年   月   日"
+    }
+  }
+-----
+FILE: c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend\data\interrogation_template.txt
+
+
+第 N 次
+讯问笔录（帮信嫌疑人）
+
+讯问时间： 自 2025年4月1日00时00分 起
+至 2025年4月1日01时00分 止
+讯问地点： 葫芦岛市执法办案管理中心询（讯）问室1
+讯问人（签名）： 单位： 葫芦岛市公安局
+记录人（签名）： 单位： 葫芦岛市公安局
+
+被讯问人：
+姓名： 李明 性别： 男 年龄： {年龄}
+出生日期： {出生日期}
+身份证件种类及号码： 居民身份证 211402200000000055
+户籍所在地： {户籍所在地}
+现住址： 辽宁省xx市xx区xx街道xx单元xx号
+联系方式： 12300000000
+
+到案经过：（口头传唤∕被扭送∕自动投案的被讯问人 月 日 时 分到达， 月 日 时 分离开，本人签名 ）
+
+讯问内容：
+
+问： 我们是葫芦岛市公安局的民警（出示人民警察证），现依法对你进行讯问，对我们的提问你应当如实回答，说假话作伪证要付法律责任。对与本案无关的问题，你有拒绝回答的权利，你听清楚了吗？
+答：
+
+问： 因为你未满18周岁，现由你的母亲XXX陪同你进行讯问，你听明白了吗？ (仅适用于未成年人)
+答：
+
+问： 这是一份《犯罪嫌疑人诉讼权利义务告知书》，你看一遍，是否理解上面的内容？
+答：
+
+问： 你是否申请办案人员回避？
+答：
+
+问： 你是否要求聘请律师？
+答：
+
+问： 这是一份《葫芦岛市公安局认罪认罚从宽制度告知书》，你看一遍，是否理解上面的内容？
+答：
+
+问： 你是对否认罪认罚？
+答：
+
+问： 你如果需要饮食或休息你可以随时提出，你现在是否需要饮食和休息？
+答：
+
+问： 你是否是人大代表或政协委员？
+答：
+
+问： 你是否是中共党员？
+答：
+
+问： 你现在是做什么工作的？
+答：
+
+问： 讲一下你的个人简历和家庭情况？
+答：
+
+问： 你是否受到过行政或刑事处罚？
+答：
+
+问： 你因何事被传唤（或口头传唤等，根据实际情况写）到公安机关？
+答：
+
+问： 讲一下事情发生的时间地点？
+答：
+
+问： 你是用哪张银行卡帮人转账？具体信息是什么？
+答：
+
+问： 你一共用你的银行卡账号跑了多少流水？
+答：
+
+问： 对方转给你多少钱？具体转账信息是什么？
+答：
+
+问： 你转出多少钱？具体转账信息是什么？
+答：
+
+问： 你一共获利多少钱？
+答：
+
+问： 你知道上家转给你的钱是如何获得的？
+答：
+
+问： 你是如何联系到上家的？
+答：
+
+问： 上家是如何与你沟通的？（方式、用的工具）
+答：
+
+问： 上家的详细信息是什么？
+答：
+
+问： 你为什么用自己的银行卡给别人转账？
+答：
+
+问： 你转出的账号信息是什么？谁提供给你的？
+答：
+
+问： 你是否知道用银行卡帮别人转钱是违法行为？
+答：
+
+问： 你获利xx元，但受害人因诈骗损失xx万元导致自杀未遂，这种交易值得吗？
+答：
+
+问： 继续隐瞒将面临3年以上刑期，主动退赃可争取缓刑，你选择哪条路？
+答：
+
+问： 你每转账10万元获利500元，但造成被害人平均损失率高达92%，这种比率合理吗？
+答：
+
+问： 你有什么证据向公安机关提供吗？
+答：
+
+问： 你还有什么要补充的吗？
+答：
+
+问： 以上所说是否属实？
+答：
+
+问： 以上笔录你看一下，和你说的是否相符？
+答：
+
+被讯问人（签名）：
+
+时 间： 年 月 日
+-----
+FILE: c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend\static\css\style.css
+/* static/css/style.css - 基础样式 */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f6;
+    color: #333;
+    line-height: 1.6;
+}
+
+.page-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.login-page, .dashboard-page {
+    max-width: 500px;
+}
+
+h1, h2, h3 {
+    color: #0056b3;
+    margin-bottom: 1em;
+}
+
+h1 { font-size: 1.8em; }
+h2 { font-size: 1.5em; }
+h3 { font-size: 1.2em; }
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    text-align: center;
+    margin-top: 10px;
+    transition: background-color 0.2s;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="tel"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Important */
+}
+
+textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.dashboard-list {
+    list-style: none;
+    padding: 0;
+}
+
+.dashboard-list li {
+    margin-bottom: 10px;
+    background-color: #e9ecef;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.dashboard-list a {
+    display: block;
+    font-weight: bold;
+}
+
+pre {
+    background-color: #eee;
+    padding: 15px;
+    border-radius: 4px;
+    white-space: pre-wrap; /* Allow wrapping */
+    word-wrap: break-word; /* Break long words */
+    font-family: monospace;
+    max-height: 500px; /* Limit height */
+    overflow-y: auto; /* Add scroll if needed */
+}
+
+.report-section, .guidance-section {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.chart-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.chart-box {
+    width: 100%;
+    max-width: 400px; /* Adjust as needed */
+    height: 300px; /* Ensure canvas has height */
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.user-table th, .user-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.user-table th {
+    background-color: #f2f2f2;
+}
+-----
+FILE: c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend\static\js\charts.js
+// static/js/charts.js
+document.addEventListener('DOMContentLoaded', function() {
+    const ageChartCtx = document.getElementById('ageChart');
+    const genderChartCtx = document.getElementById('genderChart');
+
+    if (!ageChartCtx || !genderChartCtx) {
+        console.error("Chart canvas elements not found!");
+        return;
+    }
+
+    // Mock data - In a real app, fetch this from an API endpoint
+    const mockData = {
+        ageData: {
+            labels: ['<18', '18-25', '26-35', '36-45', '46-55', '56+'],
+            values: [5, 25, 40, 22, 15, 8]
+        },
+        genderData: {
+            labels: ['男', '女', '其他'],
+            values: [63, 35, 2]
+        }
+    };
+
+    // Age Distribution Line Chart
+    new Chart(ageChartCtx, {
+        type: 'line',
+        data: {
+            labels: mockData.ageData.labels,
+            datasets: [{
+                label: '年龄分布',
+                data: mockData.ageData.values,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: '数量' }
+                },
+                x: {
+                    title: { display: true, text: '年龄段' }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: '用户年龄分布'
+                }
+            }
+        }
+    });
+
+    // Gender Distribution Pie Chart
+    new Chart(genderChartCtx, {
+        type: 'pie',
+        data: {
+            labels: mockData.genderData.labels,
+            datasets: [{
+                label: '性别分布',
+                data: mockData.genderData.values,
+                backgroundColor: [
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 99, 132)',
+                    'rgb(201, 203, 207)'
+                ],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: '用户性别分布'
+                }
+            }
+        }
+    });
+});
+-----
+FILE: c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend\templates\base.html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}倾听者后台{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <div class="page-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
+-----
+FILE: c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend\templates\dashboard.html
+{% extends "base.html" %}
+
+{% block title %}功能列表 - 倾听者后台{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+    <h2>后台功能列表</h2>
+    <ul class="dashboard-list">
+        <li><a href="{{ url_for('view_petitioner_guidance') }}">查询报告</a></li>
+        <li><a href="{{ url_for('data_analysis') }}">数据分析</a></li>
+        <li><a href="{{ url_for('interrogation_input') }}">辅助智能审讯笔录</a></li>
+        <li><a href="{{ url_for('view_petitioner_guidance') }}">上访户情绪疏导</a></li>
+        <li><a href="{{ url_for('view_juvenile_counseling') }}">未成年人犯罪心理辅导 </a></li>
+        <li><a href="{{ url_for('view_police_report') }}">民辅警心理评估报告</a></li>
+        <li><a href="{{ url_for('user_management') }}">用户管理</a></li>
+    </ul>
+    <hr>
+     <p><a href="{{ url_for('logout') }}" class="btn btn-secondary">退出登录</a></p>
+</div>
+{% endblock %}
+-----
+FILE: c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend\templates\data_analysis.html
+{% extends "base.html" %}
+
+{% block title %}数据分析 - 倾听者后台{% endblock %}
+
+{% block content %}
+    <h2>数据分析</h2>
+
+    <div class="chart-container">
+        <div class="chart-box">
+            <canvas id="ageChart"></canvas>
+        </div>
+        <div class="chart-box">
+            <canvas id="genderChart"></canvas>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <button class="btn btn-secondary" disabled>分析不同心理指标 </button>
+    </div>
+     <p><a href="{{ url_for('dashboard') }}">返回功能列表</a></p>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Load Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Load your custom chart script -->
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+{% endblock %}
+-----
+FILE: c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend\templates\interrogation_edit.html
+{% extends "base.html" %} {# Assuming you have a base template with styles/scripts #}
+
+{% block title %}编辑审讯笔录{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>编辑审讯笔录</h2>
+    <hr>
+
+    {# --- 表单开始，提交到保存路由 --- #}
+    <form action="{{ url_for('save_interrogation_record') }}" method="POST">
+
+        {# --- 基本信息部分 --- #}
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="record_number" class="form-label">笔录次数</label>
+                <input type="text" class="form-control" id="record_number" name="record_number" value="{{ template_data.record_number }}">
+            </div>
+            <div class="col-md-6">
+                <label for="title" class="form-label">标题</label>
+                <input type="text" class="form-control" id="title" name="title" value="{{ template_data.title }}">
+            </div>
+        </div>
+        <div class="row mb-3">
+             <div class="col-md-6">
+                <label for="time_start" class="form-label">开始时间</label>
+                {# Consider using datetime-local input if browser support is okay #}
+                <input type="text" class="form-control" id="time_start" name="time_start" value="{{ template_data.time_start }}">
+            </div>
+            <div class="col-md-6">
+                <label for="time_end" class="form-label">结束时间</label>
+                <input type="text" class="form-control" id="time_end" name="time_end" value="{{ template_data.time_end }}">
+            </div>
+        </div>
+         <div class="mb-3">
+            <label for="location" class="form-label">地点</label>
+            <input type="text" class="form-control" id="location" name="location" value="{{ template_data.location }}">
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="interrogator_unit" class="form-label">讯问人单位</label>
+                <input type="text" class="form-control" id="interrogator_unit" name="interrogator_unit" value="{{ template_data.interrogator_unit }}">
+            </div>
+            <div class="col-md-6">
+                 <label for="interrogator_signature" class="form-label">讯问人(签名占位)</label>
+                <input type="text" class="form-control" id="interrogator_signature" name="interrogator_signature" value="{{ template_data.interrogator_signature }}">
+            </div>
+        </div>
+         <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="recorder_unit" class="form-label">记录人单位</label>
+                <input type="text" class="form-control" id="recorder_unit" name="recorder_unit" value="{{ template_data.recorder_unit }}">
+            </div>
+            <div class="col-md-6">
+                 <label for="recorder_signature" class="form-label">记录人(签名占位)</label>
+                <input type="text" class="form-control" id="recorder_signature" name="recorder_signature" value="{{ template_data.recorder_signature }}">
+            </div>
+        </div>
+
+        <hr>
+        <h4>被讯问人信息</h4>
+         <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="person_name" class="form-label">姓名</label>
+                <input type="text" class="form-control" id="person_name" name="person_name" value="{{ template_data.person_name }}">
+            </div>
+            <div class="col-md-2">
+                <label for="person_gender" class="form-label">性别</label>
+                <input type="text" class="form-control" id="person_gender" name="person_gender" value="{{ template_data.person_gender }}">
+            </div>
+             <div class="col-md-2">
+                <label for="person_age" class="form-label">年龄</label>
+                <input type="text" class="form-control" id="person_age" name="person_age" value="{{ template_data.person_age }}">
+            </div>
+             <div class="col-md-4">
+                <label for="person_dob" class="form-label">出生日期</label>
+                <input type="text" class="form-control" id="person_dob" name="person_dob" value="{{ template_data.person_dob }}">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="person_id_type_number" class="form-label">身份证号</label>
+            <input type="text" class="form-control" id="person_id_type_number" name="person_id_type_number" value="{{ template_data.person_id_type_number }}">
+        </div>
+        <div class="mb-3">
+            <label for="person_address" class="form-label">家庭住址</label>
+            <input type="text" class="form-control" id="person_address" name="person_address" value="{{ template_data.person_address }}">
+        </div>
+         <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="person_contact" class="form-label">联系方式</label>
+                <input type="text" class="form-control" id="person_contact" name="person_contact" value="{{ template_data.person_contact }}">
+            </div>
+            <div class="col-md-6">
+                <label for="person_hukou" class="form-label">户籍地</label>
+                <input type="text" class="form-control" id="person_hukou" name="person_hukou" value="{{ template_data.person_hukou }}">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="arrival_departure_info" class="form-label">到案/离开信息</label>
+            <textarea class="form-control" id="arrival_departure_info" name="arrival_departure_info" rows="2">{{ template_data.arrival_departure_info }}</textarea>
+        </div>
+
+        <hr>
+        <h4>讯问内容</h4>
+        {# --- 问答对部分 --- #}
+        {% for qa in template_data.questions_answers %}
+        <div class="qa-pair mb-4 p-3 border rounded">
+            <div class="mb-2">
+                <label for="q_{{ loop.index0 }}" class="form-label"><b>问题 {{ loop.index }}:</b></label>
+                {# Make question editable too #}
+                <textarea class="form-control form-control-sm" id="q_{{ loop.index0 }}" name="questions_answers[{{ loop.index0 }}][q]" rows="2">{{ qa.q }}</textarea>
+            </div>
+            <div>
+                <label for="a_{{ loop.index0 }}" class="form-label">回答 {{ loop.index }}:</label>
+                <textarea class="form-control" id="a_{{ loop.index0 }}" name="questions_answers[{{ loop.index0 }}][a]" rows="4">{{ qa.a }}</textarea>
+            </div>
+        </div>
+        {% else %}
+        <p class="text-muted">模板中没有问答内容。</p>
+        {% endfor %}
+
+        {# --- 可以添加按钮来动态增加问答对 (需要 JavaScript) --- #}
+        {# <button type="button" class="btn btn-secondary btn-sm mb-3">添加问答</button> #}
+
+        <hr>
+        <h4>签名区域</h4>
+         {# --- 签名部分 (占位) --- #}
+         <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="sig_person" class="form-label">被讯问人(签名占位)</label>
+                {# Use name matching the save route: signature_section[key] #}
+                <input type="text" class="form-control" id="sig_person" name="signature_section[person_signature]" value="{{ template_data.signature_section.person_signature }}">
+            </div>
+             <div class="col-md-6">
+                <label for="sig_date" class="form-label">时间(签名占位)</label>
+                <input type="text" class="form-control" id="sig_date" name="signature_section[date]" value="{{ template_data.signature_section.date }}">
+            </div>
+         </div>
+
+
+        {# --- 提交按钮 --- #}
+        <div class="mt-4 mb-5">
+            <button type="submit" class="btn btn-primary">保存笔录</button>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">取消</a>
+            {# Optionally add a 'Save and Generate PDF' button #}
+        </div>
+
+    </form> {# --- 表单结束 --- #}
+
+</div>
+{% endblock %}
+-----
+FILE: c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend\templates\interrogation_input.html
+{% extends "base.html" %}
+
+{% block title %}智能审讯笔录 - 填写信息{% endblock %}
+
+{% block content %}
+    <h2>辅助智能审讯笔录 - 基本信息</h2>
+    <form action="{{ url_for('generate_interrogation_record') }}" method="post">
+        <div class="form-group">
+            <label for="name">姓名:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="gender">性别:</label>
+            <select id="gender" name="gender" required>
+                <option value="男">男</option>
+                <option value="女">女</option>
+                <option value="其他">其他</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="id_card">身份证号:</label>
+            <input type="text" id="id_card" name="id_card">
+        </div>
+        <div class="form-group">
+            <label for="phone">手机号:</label>
+            <input type="tel" id="phone" name="phone">
+        </div>
+         <div class="form-group">
+            <label for="address">家庭住址:</label>
+            <textarea id="address" name="address"></textarea>
+        </div>
+        <button type="submit" class="btn btn-block">生成智能审讯笔录模板</button>
+    </form>
+     <p><a href="{{ url_for('dashboard') }}">返回功能列表</a></p>
+{% endblock %}
+-----
+FILE: c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend\templates\interrogation_output.html
+{% extends "base.html" %}
+
+{% block title %}智能审讯笔录 - 模板预览{% endblock %}
+
+{% block content %}
+    <h2>智能审讯笔录 - 模板预览</h2>
+
+    <h3>填写的基本信息:</h3>
+    <ul>
+        <li>姓名: {{ basic_info.get('name', 'N/A') }}</li>
+        <li>性别: {{ basic_info.get('gender', 'N/A') }}</li>
+        <li>身份证号: {{ basic_info.get('id_card', 'N/A') }}</li>
+        <li>手机号: {{ basic_info.get('phone', 'N/A') }}</li>
+        <li>家庭住址: {{ basic_info.get('address', 'N/A') }}</li>
+    </ul>
+
+    <h3>笔录模板:</h3>
+    <pre><code>{{ record_template_str | safe }}</code></pre>
+
+    <a href="{{ url_for('download_interrogation_pdf') }}" class="btn btn-secondary" disabled>生成并导出PDF</a>
+    <p><a href="{{ url_for('interrogation_input') }}">返回填写信息</a></p>
+    <p><a href="{{ url_for('dashboard') }}">返回功能列表</a></p>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // JavaScript to make the JSON pretty print (optional)
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const codeElement = document.querySelector('pre code');
+        if (codeElement) {
+            try {
+                const jsonData = JSON.parse(codeElement.textContent);
+                // Replace basic info placeholders if needed here client-side,
+                // but it's better handled server-side usually.
+                // For now, just pretty print the template JSON.
+                codeElement.textContent = JSON.stringify(jsonData, null, 2);
+            } catch (e) {
+                console.error("Error parsing/formatting JSON template:", e);
+                // Keep the original text if parsing fails
+            }
+        }
+    });
+</script>
+{% endblock %}
+-----
+FILE: c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend\templates\login.html
+{% extends "base.html" %}
+
+{% block title %}登录 - 倾听者原型后台{% endblock %}
+
+{% block content %}
+<div class="login-page">
+    <h1>倾听者心理分析系统 - 后台原型</h1>
+    <h2>登录</h2>
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <form method="post">
+        <div class="form-group">
+            <label for="username">用户名:</label>
+            <input type="text" id="username" name="username" required value="admin"> <!-- 预填 admin -->
+        </div>
+        <div class="form-group">
+            <label for="password">密码:</label>
+            <input type="password" id="password" name="password" required value="password"> <!-- 预填 password -->
+        </div>
+        <button type="submit" class="btn btn-block">登录</button>
+    </form>
+</div>
+{% endblock %}
+-----
+FILE: c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend\templates\report_guidance_viewer.html
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - 倾听者原型后台{% endblock %}
+
+{% block content %}
+    <h2>{{ title }}</h2>
+
+    {% if show_input_form %}
+    <form method="post">
+        <div class="form-group">
+            <label for="name">姓名:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="id_card">身份证号:</label>
+            <input type="text" id="id_card" name="id_card">
+        </div>
+        <button type="submit" class="btn">查询报告并获取方案</button>
+    </form>
+    {% endif %}
+
+    {% if report_text %}
+    <div class="report-section">
+        <h3>心理评估报告</h3>
+        <pre>{{ report_text }}</pre>
+    </div>
+    {% endif %}
+
+    {% if guidance_text %}
+    <div class="guidance-section">
+        <h3>{{ guidance_title }}</h3>
+        <pre>{{ guidance_text }}</pre>
+    </div>
+    {% endif %}
+
+    {% if not show_input_form %}
+        <hr>
+        <p><a href="{{ url_for('dashboard') }}" class="btn btn-secondary">返回功能列表</a></p>
+        <!-- Add link back to input if needed -->
+        {% if back_link %}
+             <p><a href="{{ back_link }}">重新输入查询</a></p>
+        {% endif %}
+    {% else %}
+         <p><a href="{{ url_for('dashboard') }}">返回功能列表</a></p>
+    {% endif %}
+
+{% endblock %}
+-----
+FILE: c:\Users\ymh33\Desktop\Project\PythonProject\QingtingzheDemoProject\qingtingzhe_prototype_backend\templates\user_management.html
+{% extends "base.html" %}
+
+{% block title %}用户管理 - 倾听者原型后台{% endblock %}
+
+{% block content %}
+    <h2>用户管理</h2>
+
+    <table class="user-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>用户名</th>
+                <th>邮箱</th>
+                <th>姓名</th>
+                <th>是否激活</th>
+                <th>是否管理员</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email if user.email else 'N/A' }}</td>
+                <td>{{ user.full_name if user.full_name else 'N/A' }}</td>
+                <td>{{ '是' if user.is_active else '否' }}</td>
+                <td>{{ '是' if user.is_superuser else '否' }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">没有用户数据</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p><a href="{{ url_for('dashboard') }}">返回功能列表</a></p>
+{% endblock %}
+-----

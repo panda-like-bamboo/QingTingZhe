@@ -1,0 +1,46 @@
+# requirements.txt
+
+# FastAPI Core
+fastapi>=0.100.0
+uvicorn[standard]>=0.22.0
+
+# Configuration & Environment
+pydantic-settings>=2.0.0
+python-dotenv>=1.0.0
+pyyaml>=6.0
+
+# Database
+sqlalchemy>=2.0.0
+aiosqlite >= 0.17.0 # For async SQLite access
+alembic>=1.7.0
+
+# Security
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+
+# HTTP Client & File Uploads
+requests>=2.28.1
+httpx>=0.24.1
+python-multipart>=0.0.7
+Werkzeug>=2.0.0 # Secure filename utility
+
+# AI Integration
+openai>=1.30.1
+
+# Celery (Background Tasks)
+celery>=5.0.0
+# 使用 redis[hiredis] >= 5.0.0 来确保包含 redis.asyncio 并获得性能提升
+redis[hiredis]>=5.0.0 # Using hiredis for performance, requires redis-py >= 5.0 for Celery 5+ compatibility
+
+# Server-Sent Events (SSE)
+sse-starlette>=1.0.0 # 确保这一行存在
+
+# Pydantic (Base for Settings and Schemas)
+# 确保 pydantic 版本与 FastAPI 和 Pydantic-Settings 兼容
+pydantic[email]>=2.0.0
+
+# Jinja2 (If needed for any template rendering)
+jinja2>=3.0.0
+
+# --- 注意：移除了文件末尾重复的 sse-starlette 和 redis>=4.2.0 行 ---
+# --- 确保上面列出的 redis[hiredis] 和 sse-starlette 是你需要的唯一条目 ---

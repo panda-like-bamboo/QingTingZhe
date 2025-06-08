@@ -1,0 +1,3 @@
+# qingtingzhe_prototype_backend/requirements.txt
+Flask>=2.0
+python-dotenv>=0.15 # 可选，如果需要 .env 文件
